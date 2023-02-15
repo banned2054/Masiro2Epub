@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:s="https://github.com/canton7/Stylet"
+        xmlns:local="clr-namespace:Masiro.views"
         mc:Ignorable="d"
         Title="真白萌导出工具"
         Width="800"
@@ -15,7 +15,10 @@
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
         UseLayoutRounding="False"
         ShowInTaskbar="True">
-    <DockPanel>
+    <Window.Resources>
+    </Window.Resources>
+    <DockPanel Height="583">
+
         <TabControl
             Style="{StaticResource TabControlInLine}">
 
@@ -26,12 +29,157 @@
             </TabItem>
             <TabItem Header="导出">
                 <Grid>
+                    <Canvas>
+                        <StackPanel
+                            Canvas.Left="60"
+                            Canvas.Top="60">
+                            <local:BookTitleUserControl
+                                Margin="0,0,0,20"
+                                x:Name="BookTitleUserControl" />
+                            <local:CoverUserControl
+                                x:Name="CoverUserControl"
+                                Margin="0,0,0,10" />
+                            <StackPanel
+                                Margin="0,0,0,20"
+                                Orientation="Horizontal">
+                                <StackPanel
+                                    Margin="0,0,20,0">
+                                    <DataGrid
+                                        Name="ImageGrid"
+                                        Height="240"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        VerticalContentAlignment="Center"
+                                        CanUserReorderColumns="False"
+                                        AutoGenerateColumns="False"
+                                        CanUserSortColumns="False"
+                                        ItemsSource="{Binding ImagePaths}"
+                                        MinColumnWidth="240"
+                                        Margin="0,0,0,10"
+                                        MaxColumnWidth="240"
+                                        RowHeight="30">
+                                        <DataGrid.ColumnHeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                                <Setter Property="BorderThickness" Value="1" />
+                                                <Setter Property="Height" Value="30"></Setter>
+                                            </Style>
+                                        </DataGrid.ColumnHeaderStyle>
 
+                                        <DataGrid.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="ToolTip"
+                                                        Value="{Binding RelativeSource={RelativeSource Mode=Self },Path=Content.Text}" />
+                                            </Style>
+                                        </DataGrid.CellStyle>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn
+                                                Header="图片路径"
+                                                Binding="{Binding Path}" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <StackPanel
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <Button
+                                            Margin="0,0,20,0">
+                                            添加彩页
+                                        </Button>
+                                        <Button>删除选中彩页</Button>
+                                    </StackPanel>
+                                </StackPanel>
+                                <StackPanel>
+                                    <DataGrid
+                                        Name="SectionGrid"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        VerticalContentAlignment="Center"
+                                        CanUserReorderColumns="False"
+                                        AutoGenerateColumns="False"
+                                        CanUserSortColumns="False"
+                                        ItemsSource="{Binding HtmlPaths}"
+                                        RowHeight="35"
+                                        Padding="0,0,0,0">
+                                        <DataGrid.ColumnHeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                                <Setter Property="BorderThickness" Value="1" />
+                                                <Setter Property="Height" Value="30"></Setter>
+                                            </Style>
+                                        </DataGrid.ColumnHeaderStyle>
+                                        <DataGrid.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="ToolTip"
+                                                        Value="{Binding RelativeSource={RelativeSource Mode=Self },Path=Content.Text}" />
+                                            </Style>
+                                        </DataGrid.CellStyle>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn
+                                                Header="章节名"
+                                                Width="100" Binding="{Binding Title}" />
+                                            <DataGridTextColumn
+                                                Header="章节路径"
+                                                Width="320" Binding="{Binding Path}" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <StackPanel
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <Button
+                                            Margin="0,0,20,0">
+                                            添加彩页
+                                        </Button>
+                                        <Button>删除选中彩页</Button>
+                                    </StackPanel>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </Canvas>
                 </Grid>
             </TabItem>
             <TabItem Header="设置">
                 <Grid>
+                    <Canvas>
+                        <StackPanel
+                            Width="600"
+                            Canvas.Left="100"
+                            Canvas.Top="60">
+                            <CheckBox
+                                FontSize="20"
+                                x:Name="ProxyCheckBox"
+                                Content="使用代理"
+                                Margin="0,0,0,10" />
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <Label
+                                    FontSize="20"
+                                    Style="{StaticResource NoBorderLabel}"
+                                    VerticalContentAlignment="Center"
+                                    Margin="0,0,20,0">
+                                    代理地址
+                                </Label>
+                                <TextBox
+                                    x:Name="ProxyUrlEdit"
+                                    Width="200"
+                                    IsEnabled="{Binding ElementName=ProxyCheckBox, Path=IsChecked}"
+                                    Margin="0,0,10,0"
+                                    FontSize="20" />
 
+                                <Label
+                                    Style="{StaticResource NoBorderLabel}"
+                                    FontSize="20"
+                                    Margin="0,0,10,0">
+                                    :
+                                </Label>
+                                <TextBox
+                                    x:Name="ProxyPortEdit"
+                                    FontSize="20"
+                                    TextAlignment="Center"
+                                    Width="80"
+                                    Text="19800"
+                                    IsEnabled="{Binding ElementName=ProxyCheckBox, Path=IsChecked}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Canvas>
                 </Grid>
             </TabItem>
         </TabControl>
