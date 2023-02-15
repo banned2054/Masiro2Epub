@@ -1,0 +1,17 @@
+﻿<Application x:Class="Masiro.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Masiro"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Window">
+                <Setter Property="Icon" Value="C:\Code\C#\Masiro\Masiro\img\blue.png" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
