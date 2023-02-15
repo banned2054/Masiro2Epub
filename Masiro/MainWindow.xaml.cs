@@ -18,5 +18,6 @@ namespace Masiro
         {
             InitializeComponent();
         }
+        
     }
 }
