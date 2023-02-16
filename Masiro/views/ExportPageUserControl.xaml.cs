@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Masiro.views
 {
     /// <summary>
-    /// BookTitleUserControl.xaml 的交互逻辑
+    /// ExportPageUserControl.xaml 的交互逻辑
     /// </summary>
-    public partial class BookTitleUserControl : UserControl
+    public partial class ExportPageUserControl : UserControl
     {
-        public BookTitleUserControl()
+        public ExportPageUserControl()
         {
             InitializeComponent();
         }

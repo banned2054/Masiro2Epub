@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Masiro.views
 {
     /// <summary>
-    /// BookTitleUserControl.xaml 的交互逻辑
+    /// ProxySettingUserControl.xaml 的交互逻辑
     /// </summary>
-    public partial class BookTitleUserControl : UserControl
+    public partial class ProxySettingUserControl : UserControl
     {
-        public BookTitleUserControl()
+        public ProxySettingUserControl()
         {
             InitializeComponent();
         }

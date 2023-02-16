@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Masiro.views;
 
 namespace Masiro
 {
@@ -17,11 +18,6 @@ namespace Masiro
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void textBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-
         }
     }
 }
