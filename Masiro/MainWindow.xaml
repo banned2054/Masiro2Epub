@@ -22,9 +22,9 @@
             Style="{StaticResource TabControlInLine}">
 
             <TabItem Header="主页">
-                <Grid>
-
-                </Grid>
+                <local:LoginUserControl
+                    x:Name="LoginUc"
+                    Visibility="Visible" />
             </TabItem>
             <TabItem Header="导出">
                 <local:ExportPageUserControl

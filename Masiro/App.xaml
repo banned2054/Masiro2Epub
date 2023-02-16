@@ -9,10 +9,6 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="Window">
-                <Setter Property="Icon" Value="C:\Code\C#\Masiro\Masiro\img\blue.png" />
-            </Style>
-
             <Style x:Key="NoBorderLabel" TargetType="{x:Type Label}">
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="BorderBrush" Value="Transparent" />
