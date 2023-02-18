@@ -13,6 +13,8 @@
             VerticalContentAlignment="Center"
             CanUserReorderColumns="False"
             AutoGenerateColumns="False"
+            SelectionMode="Extended"
+            SelectionUnit="FullRow"
             CanUserSortColumns="False"
             ItemsSource="{Binding EpisodeList}"
             RowHeight="35"
@@ -43,20 +45,24 @@
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="章节名"
-                    Width="100" Binding="{Binding Title}" />
+                    Width="100" Binding="{Binding Title, Mode=TwoWay}" />
                 <DataGridTextColumn
                     Header="章节地址"
-                    Width="320" Binding="{Binding SubUrl}" />
+                    Width="320" Binding="{Binding SubUrl, Mode=TwoWay}" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Button
+                Click="AddSectionButton"
                 Margin="0,0,20,0">
                 添加章节
             </Button>
-            <Button>删除选中章节</Button>
+            <Button
+                Click="DeleteSectionButton">
+                删除选中章节
+            </Button>
         </StackPanel>
     </StackPanel>
 </UserControl>

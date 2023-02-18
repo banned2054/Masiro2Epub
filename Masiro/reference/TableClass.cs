@@ -15,6 +15,12 @@ namespace Masiro.reference
 
     public class Episode
     {
+        public Episode()
+        {
+            Title  = "";
+            SubUrl = "";
+        }
+
         public Episode(Episode oldEpisode)
         {
             Title  = oldEpisode.Title[..];
