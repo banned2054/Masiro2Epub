@@ -1,0 +1,120 @@
+﻿<UserControl x:Class="Masiro.views.SelectPageUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Masiro.views"
+             mc:Ignorable="d">
+    <StackPanel>
+        <StackPanel
+            Margin="0,0,0,60"
+            Orientation="Horizontal">
+            <Label
+                x:Name="UserNameLabel"
+                Style="{StaticResource NoBorderLabel}"
+                VerticalContentAlignment="Center"
+                Margin="10">
+                你好,xx
+            </Label>
+            <Button
+                x:Name="LogoutButton"
+                Padding="0,0,0,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Height="20"
+                Width="40">
+                登出
+            </Button>
+        </StackPanel>
+        <StackPanel
+            HorizontalAlignment="Center">
+            <StackPanel
+                Margin="0,0,0,10"
+                Orientation="Horizontal">
+                <Label
+                    Style="{StaticResource NoBorderLabel}"
+                    VerticalContentAlignment="Center"
+                    Margin="0,0,10,0"
+                    FontSize="20">
+                    真白萌地址
+                </Label>
+                <TextBox
+                    x:Name="BookUrlEdit"
+                    Margin="0,0,20,0"
+                    FontSize="20"
+                    Width="500">
+                </TextBox>
+                <Button
+                    x:Name="SearchButton"
+                    Padding="0,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    FontSize="20"
+                    Height="33"
+                    Width="60">
+                    访问
+                </Button>
+            </StackPanel>
+            <Button
+                x:Name="ReturnToSearchButton"
+                Padding="0,0,0,0"
+                HorizontalAlignment="Left"
+                Visibility="Collapsed"
+                FontSize="20"
+                Height="35"
+                Width="60">
+                返回
+            </Button>
+            <Label
+                FontSize="20"
+                Style="{StaticResource NoBorderLabel}">
+                选择第几卷
+            </Label>
+            <DataGrid
+                x:Name="ChapterGrid"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                VerticalContentAlignment="Center"
+                Margin="0,0,0,10"
+                CanUserReorderColumns="False"
+                AutoGenerateColumns="False"
+                CanUserSortColumns="False"
+                Height="240"
+                Width="400">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Height" Value="30"></Setter>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="ToolTip"
+                                Value="{Binding RelativeSource={RelativeSource Mode=Self },Path=Content.Text}" />
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Header="卷名"
+                        Binding="{Binding Path}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="ExportButton"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Padding="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Height="35"
+                    Width="60">
+                    导出
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

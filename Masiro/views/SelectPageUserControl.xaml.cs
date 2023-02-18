@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Masiro.views
 {
     /// <summary>
-    /// SearchPageUserControl.xaml 的交互逻辑
+    /// SelectPageUserControl.xaml 的交互逻辑
     /// </summary>
-    public partial class SearchPageUserControl : UserControl
+    public partial class SelectPageUserControl : UserControl
     {
-        public SearchPageUserControl()
+        public SelectPageUserControl()
         {
             InitializeComponent();
         }

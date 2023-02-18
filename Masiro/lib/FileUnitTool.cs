@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Net.Http;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
 
 namespace Masiro.lib
@@ -101,6 +100,11 @@ namespace Masiro.lib
 
         public static void WriteFile(string filePath, string str)
         {
+            if (!JudgeFileExist(filePath))
+            {
+                MakeFile(filePath);
+            }
+
             using StreamWriter writer = new(filePath);
             writer.Write(str);
             writer.Close();

@@ -27,7 +27,6 @@
                     <Setter Property="Height" Value="30"></Setter>
                 </Style>
             </DataGrid.ColumnHeaderStyle>
-
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
                     <Setter Property="ToolTip"

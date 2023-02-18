@@ -38,7 +38,6 @@
                 FontSize="20"
                 TextAlignment="Center"
                 Width="80"
-                Text="19800"
                 IsEnabled="{Binding ElementName=ProxyCheckBox, Path=IsChecked}" />
         </StackPanel>
     </StackPanel>
