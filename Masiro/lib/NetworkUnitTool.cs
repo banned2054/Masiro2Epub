@@ -26,11 +26,7 @@ namespace Masiro.lib
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception("获取token失败！");
-            }
-            else
-            {
-                Console.WriteLine("token 获取成功");
+                return new Token($"fail:{response.StatusCode}", new CookieCollection());
             }
 
             var contentEncoding = response.Headers?.FirstOrDefault(h => h.Name != null &&
@@ -100,7 +96,7 @@ namespace Masiro.lib
                        : new Token("success", new CookieCollection());
         }
 
-        public static async Task<string> BookHtml(CookieCollection cookies, string subUrl)
+        public static async Task<string> MasiroHtml(CookieCollection cookies, string subUrl)
         {
             var client          = new RestClient("https://masiro.me");
             var cookieHeader    = string.Join("; ", cookies.Select(c => $"{c.Name}={c.Value}"));

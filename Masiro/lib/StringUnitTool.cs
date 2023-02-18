@@ -1,7 +1,9 @@
 ﻿using HtmlAgilityPack;
+using Masiro.reference;
 using OpenCCNET;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -65,9 +67,9 @@ namespace Masiro.lib
             return stringBuilder.ToString();
         }
 
-        static List<Chapter> GetChapterList(string originText)
+        public static ObservableCollection<Chapter> GetChapterList(string originText)
         {
-            var chapterList = new List<Chapter>();
+            var chapterList = new ObservableCollection<Chapter>();
             var htmlDoc     = new HtmlDocument();
             htmlDoc.LoadHtml(originText);
             var ulNode = htmlDoc.DocumentNode.SelectSingleNode("//ul[@class='chapter-ul']");
@@ -126,35 +128,6 @@ namespace Masiro.lib
             var title = spanNodes[0].InnerText.Trim().Replace("&nbsp;", "");
             title = title.ToHansFromHant();
             return title;
-        }
-
-        class Episode
-        {
-            public Episode(string title, string subUrl)
-            {
-                Title  = title;
-                SubUrl = subUrl;
-            }
-
-            public string Title  { get; set; }
-            public string SubUrl { get; set; }
-        }
-
-        class Chapter
-        {
-            public Chapter(string bookTitle)
-            {
-                BookTitle   = bookTitle;
-                EpisodeList = new List<Episode>();
-            }
-
-            public void SetEpisodeList(IEnumerable<Episode> episodeList)
-            {
-                EpisodeList = new List<Episode>(episodeList);
-            }
-
-            public string        BookTitle   { get; set; }
-            public List<Episode> EpisodeList { get; set; }
         }
     }
 }

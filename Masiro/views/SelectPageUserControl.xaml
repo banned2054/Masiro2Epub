@@ -52,6 +52,7 @@
                     VerticalAlignment="Stretch"
                     FontSize="20"
                     Height="33"
+                    Click="SearchButton_OnClick"
                     Width="60">
                     访问
                 </Button>
@@ -73,12 +74,15 @@
             </Label>
             <DataGrid
                 x:Name="ChapterGrid"
+                SelectionMode="Single"
+                SelectionUnit="FullRow"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 VerticalContentAlignment="Center"
                 Margin="0,0,0,10"
                 CanUserReorderColumns="False"
                 AutoGenerateColumns="False"
                 CanUserSortColumns="False"
+                ItemsSource="{Binding ChapterList}"
                 Height="240"
                 Width="400">
                 <DataGrid.ColumnHeaderStyle>
@@ -90,14 +94,27 @@
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
                         <Setter Property="ToolTip"
                                 Value="{Binding RelativeSource={RelativeSource Mode=Self },Path=Content.Text}" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center" />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn
-                        Header="卷名"
-                        Binding="{Binding Path}" />
+                        Header="标题"
+                        Width="400"
+                        Binding="{Binding BookTitle}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel
@@ -112,6 +129,7 @@
                     VerticalAlignment="Center"
                     FontSize="20"
                     Height="35"
+                    Click="ExportButton_OnClick"
                     Width="60">
                     导出
                 </Button>

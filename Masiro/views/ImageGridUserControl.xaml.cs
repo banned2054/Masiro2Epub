@@ -1,8 +1,8 @@
-﻿using Masiro.reference;
+﻿using Masiro.lib;
+using Masiro.reference;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using Masiro.lib;
 
 namespace Masiro.views
 {

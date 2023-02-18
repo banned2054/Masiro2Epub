@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Masiro.views"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d">
     <StackPanel>
         <DataGrid
             Name="SectionGrid"
@@ -15,7 +14,7 @@
             CanUserReorderColumns="False"
             AutoGenerateColumns="False"
             CanUserSortColumns="False"
-            ItemsSource="{Binding HtmlPaths}"
+            ItemsSource="{Binding EpisodeList}"
             RowHeight="35"
             Margin="0,0,0,10"
             Padding="0,0,0,0">
@@ -30,6 +29,15 @@
                 <Style TargetType="DataGridCell">
                     <Setter Property="ToolTip"
                             Value="{Binding RelativeSource={RelativeSource Mode=Self },Path=Content.Text}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
@@ -37,8 +45,8 @@
                     Header="章节名"
                     Width="100" Binding="{Binding Title}" />
                 <DataGridTextColumn
-                    Header="章节路径"
-                    Width="320" Binding="{Binding Path}" />
+                    Header="章节地址"
+                    Width="320" Binding="{Binding SubUrl}" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel
@@ -46,9 +54,9 @@
             Orientation="Horizontal">
             <Button
                 Margin="0,0,20,0">
-                添加彩页
+                添加章节
             </Button>
-            <Button>删除选中彩页</Button>
+            <Button>删除选中章节</Button>
         </StackPanel>
     </StackPanel>
 </UserControl>

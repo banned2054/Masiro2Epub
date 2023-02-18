@@ -1,15 +1,6 @@
-﻿using Masiro.lib;
-using Masiro.reference;
+﻿using Masiro.reference;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using Masiro.views;
 
 namespace Masiro
 {
@@ -18,6 +9,21 @@ namespace Masiro
         public MainWindow()
         {
             InitializeComponent();
+
+            HomePageUc.SelectUc.ExportButtonClicked += HandleCustomEvent;
+        }
+
+        private void HandleCustomEvent(object? sender, EventArgs e)
+        {
+            if (e is not ArgumentConvey.ChapterHandleArgs arg) return;
+            var chapter = arg.NowChapter;
+            MainWindowTab.SelectedIndex                 = 1; // 切换到第二个选项卡
+            ExportPageUc.BookTitleUc.BookTitleEdit.Text = chapter.BookTitle;
+            ExportPageUc.SectionGridUc.EpisodeList.Clear();
+            foreach (var episode in chapter.EpisodeList)
+            {
+                ExportPageUc.SectionGridUc.EpisodeList.Add(new Episode(episode));
+            }
         }
     }
 }

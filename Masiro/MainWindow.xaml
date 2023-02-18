@@ -19,8 +19,8 @@
     </Window.Resources>
     <DockPanel Height="583">
         <TabControl
+            x:Name="MainWindowTab"
             Style="{StaticResource TabControlInLine}">
-
             <TabItem Header="主页">
                 <local:HomePageUserControl
                     x:Name="HomePageUc" />
