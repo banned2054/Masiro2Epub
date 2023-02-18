@@ -84,7 +84,7 @@ namespace Masiro.lib
 
         public static string ReadFile(string filePath)
         {
-            string ans = File.ReadAllText(filePath);
+            var ans = File.ReadAllText(filePath);
             return ans;
         }
 

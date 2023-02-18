@@ -1,6 +1,8 @@
 ﻿using Masiro.reference;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
+using Masiro.lib;
 
 namespace Masiro.views
 {
@@ -15,7 +17,17 @@ namespace Masiro.views
         public ImageGridUserControl()
         {
             InitializeComponent();
-            ImagePaths = new ObservableCollection<ImagePath>();
+            ImagePaths                 = new ObservableCollection<ImagePath>();
+            this.ImageGrid.DataContext = this;
+        }
+
+        private void AddImageButtonClick(object sender, RoutedEventArgs e)
+        {
+            var imageList = FileUnitTool.SelectFiles(FileType.Image);
+            foreach (var imagePath in imageList)
+            {
+                ImagePaths.Add(new ImagePath { Path = imagePath });
+            }
         }
     }
 }

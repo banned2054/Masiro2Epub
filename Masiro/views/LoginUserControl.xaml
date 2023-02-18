@@ -37,9 +37,9 @@
                     Style="{StaticResource NoBorderLabel}"
                     VerticalContentAlignment="Center"
                     HorizontalContentAlignment="Center"
-                    Margin="0,0,20,0"
+                    Margin="0,0,40,0"
                     FontSize="20">
-                    用户名
+                    密码
                 </Label>
                 <PasswordBox
                     x:Name="PasswordEdit"
@@ -51,6 +51,7 @@
             <Button
                 Width="60"
                 Height="35"
+                Click="LoginButton_OnClick"
                 x:Name="LoginButton">
                 登录
             </Button>

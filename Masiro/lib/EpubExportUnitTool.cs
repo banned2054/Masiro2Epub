@@ -38,16 +38,15 @@ namespace Masiro.lib
             return dirPath;
         }
 
-        public static async Task<string> MakeSection(string rootPath, string htmlPath, int index, int length)
+        public static async Task<string> MakeSection(string rootPath, string originText, int index, int length)
         {
-            string originText = FileUnitTool.ReadFile(htmlPath);
-            string finalText  = reference.HeadReference.SectionXmlHead;
+            var finalText = reference.HeadReference.SectionXmlHead;
 
-            string imageDirPath   = $"{rootPath}/OEBPS/Images";
-            string sectionDirPath = $"{rootPath}/OEBPS/Text";
+            var imageDirPath   = $"{rootPath}/OEBPS/Images";
+            var sectionDirPath = $"{rootPath}/OEBPS/Text";
 
-            string            title    = StringUnitTool.GetTitle(originText);
-            List<MessageItem> bodyList = StringUnitTool.GetBody(originText);
+            var title    = StringUnitTool.GetTitle(originText);
+            var bodyList = StringUnitTool.GetBody(originText);
 
             finalText += $"<title>{title}</title></head><body><div><h2>{title}</h2>";
             //解析body

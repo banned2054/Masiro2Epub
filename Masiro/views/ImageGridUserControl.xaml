@@ -43,8 +43,9 @@
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Button
+                Click="AddImageButtonClick"
                 Margin="0,0,20,0">
-                添加彩页
+                添加本地彩页
             </Button>
             <Button>删除选中彩页</Button>
         </StackPanel>

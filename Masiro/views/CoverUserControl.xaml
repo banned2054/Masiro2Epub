@@ -21,7 +21,12 @@
                 Width="300"
                 Margin="0,0,20,0" />
             <Button
-                FontSize="20" BorderThickness="1,1,1,1" Padding="0,0,0,0" Height="36" Width="120">
+                Click="ButtonBase_OnClick"
+                BorderThickness="1,1,1,1"
+                FontSize="20"
+                Padding="0,0,0,0"
+                Height="36"
+                Width="120">
                 选择封面
             </Button>
         </StackPanel>

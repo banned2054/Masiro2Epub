@@ -22,13 +22,8 @@
             Style="{StaticResource TabControlInLine}">
 
             <TabItem Header="主页">
-                <Grid>
-                    <local:LoginUserControl
-                        x:Name="LoginUc"
-                        Visibility="Collapsed" />
-                    <local:SelectPageUserControl
-                        Visibility="Visible" />
-                </Grid>
+                <local:HomePageUserControl
+                    x:Name="HomePageUc" />
             </TabItem>
             <TabItem Header="导出">
                 <local:ExportPageUserControl

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Masiro.lib;
 
 namespace Masiro.views
 {
@@ -23,6 +24,12 @@ namespace Masiro.views
         public CoverUserControl()
         {
             InitializeComponent();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var filePath = FileUnitTool.SelectFile();
+            this.BookCoverEdit.Text = filePath;
         }
     }
 }
