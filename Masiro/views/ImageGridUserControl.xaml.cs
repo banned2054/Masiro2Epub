@@ -1,6 +1,7 @@
 ﻿using Masiro.lib;
 using Masiro.reference;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,13 +13,13 @@ namespace Masiro.views
     public partial class ImageGridUserControl : UserControl
     {
         //原图片路径，用于彩页表格
-        public ObservableCollection<ImagePath> ImagePaths { get; set; }
+        public ObservableCollection<ImagePath> ImagePathList { get; set; }
 
         public ImageGridUserControl()
         {
             InitializeComponent();
-            ImagePaths                 = new ObservableCollection<ImagePath>();
-            this.ImageGrid.DataContext = this;
+            ImagePathList         = new ObservableCollection<ImagePath>();
+            ImageGrid.DataContext = this;
         }
 
         private void AddImageButtonClick(object sender, RoutedEventArgs e)
@@ -26,7 +27,16 @@ namespace Masiro.views
             var imageList = FileUnitTool.SelectFiles(FileType.Image);
             foreach (var imagePath in imageList)
             {
-                ImagePaths.Add(new ImagePath { Path = imagePath });
+                ImagePathList.Add(new ImagePath { Path = imagePath });
+            }
+        }
+
+        private void DeleteButtonClick(object sender, RoutedEventArgs e)
+        {
+            var selectedItemList = ImageGrid.SelectedItems.Cast<ImagePath>().ToList();
+            foreach (var imagePath in selectedItemList)
+            {
+                ImagePathList.Remove(imagePath);
             }
         }
     }

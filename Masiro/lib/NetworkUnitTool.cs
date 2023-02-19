@@ -11,7 +11,7 @@ namespace Masiro.lib
 {
     class NetworkUnitTool
     {
-        public async Task<bool> IsImageUrl(string url)
+        public static async Task<bool> IsImageUrl(string url)
         {
             using var client   = new HttpClient();
             var       response = await client.GetAsync(url);
@@ -111,7 +111,7 @@ namespace Masiro.lib
                        : new Token("success", new CookieCollection());
         }
 
-        public static async Task<string> MasiroHtml(CookieCollection cookies, string subUrl)
+        public static async Task<Token> MasiroHtml(CookieCollection cookies, string subUrl)
         {
             var client          = new RestClient("https://masiro.me");
             var cookieHeader    = string.Join("; ", cookies.Select(c => $"{c.Name}={c.Value}"));
@@ -128,10 +128,18 @@ namespace Masiro.lib
 
             if (novelResponse.StatusCode != HttpStatusCode.OK)
             {
-                return $"fail:{novelResponse.StatusDescription}";
+                if (novelResponse.Cookies != null)
+                    return new Token($"fail:{novelResponse.StatusCode}", novelResponse.Cookies);
             }
 
-            return novelResponse.Content ?? "fail:No content";
+            if (novelResponse.Content != null)
+                return novelResponse.Cookies != null
+                           ? new Token(novelResponse.Content, novelResponse.Cookies)
+                           : new Token(novelResponse.Content, new CookieCollection());
+
+            return novelResponse.Cookies != null
+                       ? new Token("fail:没有文字", novelResponse.Cookies)
+                       : new Token("fail:没有文字", new CookieCollection());
         }
 
         public class Token

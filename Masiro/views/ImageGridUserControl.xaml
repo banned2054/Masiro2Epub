@@ -14,8 +14,10 @@
             VerticalContentAlignment="Center"
             CanUserReorderColumns="False"
             AutoGenerateColumns="False"
+            SelectionMode="Extended"
+            SelectionUnit="FullRow"
             CanUserSortColumns="False"
-            ItemsSource="{Binding ImagePaths}"
+            ItemsSource="{Binding ImagePathList}"
             MinColumnWidth="240"
             Margin="0,0,0,10"
             MaxColumnWidth="240"
@@ -35,6 +37,7 @@
             </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn
+                    IsReadOnly="True"
                     Header="图片路径"
                     Binding="{Binding Path}" />
             </DataGrid.Columns>
@@ -47,7 +50,8 @@
                 Margin="0,0,20,0">
                 添加本地彩页
             </Button>
-            <Button>删除选中彩页</Button>
+            <Button
+                Click="DeleteButtonClick">删除选中彩页</Button>
         </StackPanel>
     </StackPanel>
 

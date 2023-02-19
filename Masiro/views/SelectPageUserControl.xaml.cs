@@ -35,13 +35,13 @@ namespace Masiro.views
                 if (user == null) return;
                 var subUrl     = url.Split("https://masiro.me")[1];
                 var originHtml = await NetworkUnitTool.MasiroHtml(user.Cookie, subUrl);
-                if (originHtml.StartsWith("fail"))
+                if (originHtml.MyToken.StartsWith("fail"))
                 {
-                    MessageBox.Show($"error:{originHtml[5..]}");
+                    MessageBox.Show($"error:{originHtml.MyToken[5..]}");
                     return;
                 }
 
-                var chapterList = StringUnitTool.GetChapterList(originHtml);
+                var chapterList = StringUnitTool.GetChapterList(originHtml.MyToken);
                 ChapterList.Clear();
                 foreach (var chapter in chapterList)
                 {

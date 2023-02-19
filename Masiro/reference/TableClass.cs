@@ -7,12 +7,6 @@ namespace Masiro.reference
         public string Path { get; set; }
     }
 
-    public class HtmlPath
-    {
-        public string Path  { get; set; }
-        public string Title { get; set; }
-    }
-
     public class Episode
     {
         public Episode()

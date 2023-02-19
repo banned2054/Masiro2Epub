@@ -88,10 +88,10 @@ namespace Masiro.lib
             return newFileName;
         }
 
-        public static void MakeImagePage(string rootPath, string oldImagePath, int index, int length)
+        public static async void MakeImagePage(string rootPath, string oldImagePath, int index, int length)
         {
             var pageDirPath = $"{rootPath}/OEBPS/Text";
-            var finalText   = GetImageText(rootPath, oldImagePath, "彩页", "");
+            var finalText   = await GetImageText(rootPath, oldImagePath, "彩页", "");
 
             int maxLength   = (int)Math.Log10(length);
             int nowLength   = (int)Math.Log10(index);
@@ -108,9 +108,9 @@ namespace Masiro.lib
             FileUnitTool.WriteFile(newFilePath, finalText);
         }
 
-        public static void MakeCoverPage(string rootPath, string oldImagePath)
+        public static async void MakeCoverPage(string rootPath, string oldImagePath)
         {
-            var finalText   = GetImageText(rootPath, oldImagePath, "封面", "cover.jpg");
+            var finalText   = await GetImageText(rootPath, oldImagePath, "封面", "cover.jpg");
             var newFilePath = $"{rootPath}/OEBPS/Text/cover.xhtml";
             FileUnitTool.MakeFile(newFilePath);
             FileUnitTool.WriteFile(newFilePath, finalText);
@@ -258,7 +258,8 @@ namespace Masiro.lib
             FileUnitTool.WriteFile(newFilePath, finalText);
         }
 
-        private static string GetImageText(string rootPath, string oldImagePath, string title, string fileName)
+        private static async Task<string> GetImageText(string rootPath, string oldImagePath, string title,
+                                                       string fileName)
         {
             var finalText = reference.HeadReference.SectionXmlHead;
 
@@ -270,7 +271,14 @@ namespace Masiro.lib
             }
 
             var newImagePath = $"{imageDirPath}/{newImageName}";
-            File.Copy(oldImagePath, newImagePath);
+            if (oldImagePath.StartsWith("http"))
+            {
+                await FileUnitTool.DownloadFileAsync(oldImagePath, newImagePath);
+            }
+            else
+            {
+                File.Copy(oldImagePath, newImagePath);
+            }
 
             finalText += $"<title>{title}</title></head><body><div>"                               +
                          "<div class=\"duokan-image-single illus\">"                               +

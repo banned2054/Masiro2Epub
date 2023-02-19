@@ -33,8 +33,17 @@ namespace Masiro.lib
             htmlDoc.LoadHtml(originText);
             var bodyDivNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'box-body')]");
             if (bodyDivNode == null) return ans;
-            var lineList = bodyDivNode.SelectNodes("p");
-            if (lineList == null) return ans;
+            var lineList = bodyDivNode.SelectNodes(".//span[@style]");
+            if (lineList == null)
+            {
+                lineList = bodyDivNode.SelectNodes(".//p");
+            }
+            else if (lineList.Count == 1)
+            {
+                lineList = bodyDivNode.SelectNodes(".//p");
+            }
+
+
             foreach (var lineNode in lineList)
             {
                 var imageNode = lineNode.SelectSingleNode(".//img");
@@ -46,7 +55,8 @@ namespace Masiro.lib
                 else
                 {
                     var line = lineNode.InnerText.Trim();
-                    if (line == "") continue;
+                    if (line        == "") continue;
+                    if (line.Length == 1) continue;
                     if (line.All(c => c == '?')) line = "";
                     ans.Add(new MessageItem(line));
                 }
