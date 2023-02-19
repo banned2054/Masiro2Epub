@@ -19,7 +19,7 @@ namespace Masiro.views
         private bool   _isExporting = false;
         private double _maxProgress = 0;
         private int    _i           = 0;
-        private string _finalName;
+        private string _finalName   = "";
 
         public double NowProgress
         {
@@ -50,7 +50,6 @@ namespace Masiro.views
         {
             if (_isExporting) return;
 
-            bool coverIsLocal = false;
             if (BookTitleUc.BookTitleEdit.Text == "")
             {
                 MessageBox.Show("请输入标题");
@@ -73,18 +72,12 @@ namespace Masiro.views
                     MessageBox.Show("封面链接错误");
                     return;
                 }
-
-                coverIsLocal = false;
             }
 
             else if (!FileUnitTool.JudgeFileExist(coverPath))
             {
                 MessageBox.Show("封面图片不存在");
                 return;
-            }
-            else
-            {
-                coverIsLocal = true;
             }
 
             if (SectionGridUc.EpisodeList.Any(episode => episode.Title == "" || episode.SubUrl == "" ||
@@ -132,12 +125,10 @@ namespace Masiro.views
                                                         while (_isExporting)
                                                         {
                                                             UpdateValue();
-                                                            if (NowProgress == 100)
-                                                            {
-                                                                _isExporting = false;
-                                                                System.Diagnostics.Process.Start("Explorer.exe",
-                                                                    _finalName);
-                                                            }
+                                                            if (Math.Abs(NowProgress - 100) > 0.000001) continue;
+                                                            _isExporting = false;
+                                                            System.Diagnostics.Process.Start("Explorer.exe",
+                                                                _finalName);
                                                         }
                                                     }))
                          {

@@ -4,6 +4,11 @@ namespace Masiro.reference
 {
     public class ImagePath
     {
+        public ImagePath()
+        {
+            Path = "";
+        }
+
         public string Path { get; set; }
     }
 
