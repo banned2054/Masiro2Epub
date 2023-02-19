@@ -9,6 +9,7 @@ namespace Masiro.views
     public partial class LoginUserControl : UserControl
     {
         public event EventHandler LoginButtonClicked = null!;
+        bool                      _isLogin           = false;
 
         public LoginUserControl()
         {
@@ -25,11 +26,19 @@ namespace Masiro.views
 
         private async void LoginButton_OnClick(object sender, RoutedEventArgs e)
         {
+            if (_isLogin)
+            {
+                MessageBox.Show("登陆中，请等待");
+                return;
+            }
+
             if (UserNameEdit.Text == "" || PasswordEdit.Password == "")
             {
                 MessageBox.Show("请输入账号密码");
                 return;
             }
+
+            _isLogin = true;
 
 
             var jsonString = FileUnitTool.ReadFile("data/user.json");
@@ -42,6 +51,7 @@ namespace Masiro.views
             var loginToken = await NetworkUnitTool.LoginMasiro(token, user.UserName, user.Password);
             if (loginToken.MyToken != "success")
             {
+                _isLogin = false;
                 var errorMessage = loginToken.MyToken[5..];
                 MessageBox.Show($"登录失败:{errorMessage}");
                 return;
@@ -51,6 +61,7 @@ namespace Masiro.views
             jsonString  = JsonUtility.ToJson(user);
             FileUnitTool.WriteFile("data/user.json", jsonString);
             MessageBox.Show("登录成功！");
+            _isLogin = false;
             // 触发LoginButtonClicked事件
             LoginButtonClicked?.Invoke(this, EventArgs.Empty);
         }
