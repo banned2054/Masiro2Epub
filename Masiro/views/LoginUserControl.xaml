@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Masiro.views"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d">
     <Grid
         HorizontalAlignment="Center"
         VerticalAlignment="Center">
@@ -29,7 +28,6 @@
                     FontSize="20">
                 </TextBox>
             </StackPanel>
-
             <StackPanel
                 Margin="0,0,0,10"
                 Orientation="Horizontal">

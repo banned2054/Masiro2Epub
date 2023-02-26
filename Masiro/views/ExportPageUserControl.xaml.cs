@@ -152,7 +152,7 @@ namespace Masiro.views
             }
         }
 
-        async void ExportWorks()
+        private async void ExportWorks()
         {
             _isExporting = true;
             NowProgress  = 0;

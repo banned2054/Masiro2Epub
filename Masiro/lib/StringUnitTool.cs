@@ -37,10 +37,26 @@ namespace Masiro.lib
             if (lineList == null)
             {
                 lineList = bodyDivNode.SelectNodes(".//p");
+                if (lineList == null)
+                {
+                    lineList = bodyDivNode.SelectNodes(".//div");
+                }
+                else if (lineList.Count == 1)
+                {
+                    lineList = bodyDivNode.SelectNodes(".//div");
+                }
             }
             else if (lineList.Count == 1)
             {
                 lineList = bodyDivNode.SelectNodes(".//p");
+                if (lineList == null)
+                {
+                    lineList = bodyDivNode.SelectNodes(".//div");
+                }
+                else if (lineList.Count == 1)
+                {
+                    lineList = bodyDivNode.SelectNodes(".//div");
+                }
             }
 
 

@@ -89,13 +89,35 @@ namespace Masiro.lib
         }
 
 
-        public static async Task DownloadFileAsync(string uri, string filePath)
+        public static async Task<string> DownloadFileAsync(string uri, string filePath)
         {
             using HttpClient   client           = new();
             using var          response         = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
             await using var    streamToReadFrom = await response.Content.ReadAsStreamAsync();
             await using Stream streamToWriteTo  = File.Open(filePath, FileMode.Create);
-            await streamToReadFrom.CopyToAsync(streamToWriteTo);
+
+            return await CopyImageToFile(streamToReadFrom, streamToWriteTo, 5);
+        }
+
+        private static async Task<string> CopyImageToFile(Stream streamToReadFrom, Stream streamToWriteTo, int time)
+        {
+            if (time == 0)
+            {
+                return "fail";
+            }
+
+            var random     = new System.Random();
+            var randomTime = random.Next(0, (int)(2000 * (1.0 - time * 0.2)));
+            await Task.Delay(randomTime);
+            try
+            {
+                await streamToReadFrom.CopyToAsync(streamToWriteTo);
+                return "success";
+            }
+            catch
+            {
+                return await CopyImageToFile(streamToReadFrom, streamToWriteTo, time - 1);
+            }
         }
 
         public static void WriteFile(string filePath, string str)

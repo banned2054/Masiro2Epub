@@ -61,7 +61,12 @@ namespace Masiro.lib
                     var newImageName = FileUnitTool.GetRandomFileName(imageDirPath, "jpg");
                     var newImagePath = $"{imageDirPath}/{newImageName}";
                     FileUnitTool.MakeFile(newImagePath);
-                    await FileUnitTool.DownloadFileAsync(body.ItemValue, newImagePath);
+                    var result = await FileUnitTool.DownloadFileAsync(body.ItemValue, newImagePath);
+                    if (result == "fail")
+                    {
+                        continue;
+                    }
+
                     finalText +=
                         $"<div class=\"duokan-image-single illus\"><img src=\"../Images/{newImageName}\" alt = \"{newImageName}\"/></div>";
                 }
