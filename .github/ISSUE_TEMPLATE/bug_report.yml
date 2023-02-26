@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         描述问题前，请先更新到最新版本。
-        最新版本: [version](https://img.shields.io/docker/v/banned2054/Masiro2Epub)
+        最新版本: [version](https://api.github.com/repos/banned2054/Masiro2Epub/releases/latest)
         确认非上述问题后，请详细描述你所遇到的问题，并附上相应信息。
         如果问题已经列在 [FAQ](https://github.com/banned2054/Masiro2Epub/wiki/FAQ) 中，会直接关闭 issue。
   - type: input
