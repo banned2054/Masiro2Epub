@@ -1,0 +1,48 @@
+name: 问题反馈
+description: File a bug report
+title: "[错误报告]"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        描述问题前，请先更新到最新版本。
+        最新版本: [version](https://img.shields.io/docker/v/banned2054/Masiro2Epub)
+        确认非上述问题后，请详细描述你所遇到的问题，并附上相应信息。
+        如果问题已经列在 [FAQ](https://github.com/banned2054/Masiro2Epub/wiki/FAQ) 中，会直接关闭 issue。
+  - type: input
+    id: version
+    attributes:
+      label: 当前程序版本
+      description: 遇到问题时程序所在的版本号
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: 问题类型
+      description: 你在以下哪个部分碰到了问题
+      options:
+        - 登录问题
+        - 小说下载问题
+        - 其他问题
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 问题描述
+      description: 请详细描述你碰到的问题
+      placeholder: "问题描述"
+    validations:
+      required: true
+  - type: textarea
+    id: novel-url
+    attributes:
+      label: 小说下载网址
+      description: 如果是小说下载出现问题，请发小说下载的网址
+  - type: textarea
+    id: novel-chapter
+    attributes:
+      label: 小说下载出错的章节
+      description: 如果是小说下载出现问题，请发小说下载时选择章节
