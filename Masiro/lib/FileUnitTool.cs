@@ -1,8 +1,12 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Security.Authentication;
 using System.Threading.Tasks;
+using HandyControl.Controls;
+using Masiro.reference;
 
 namespace Masiro.lib
 {
@@ -84,6 +88,11 @@ namespace Masiro.lib
 
         public static string ReadFile(string filePath)
         {
+            if (!JudgeFileExist(filePath))
+            {
+                MakeFile(filePath);
+            }
+
             var ans = File.ReadAllText(filePath);
             return ans;
         }
@@ -91,12 +100,53 @@ namespace Masiro.lib
 
         public static async Task<string> DownloadFileAsync(string uri, string filePath)
         {
-            using HttpClient   client           = new();
-            using var          response         = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
-            await using var    streamToReadFrom = await response.Content.ReadAsStreamAsync();
-            await using Stream streamToWriteTo  = File.Open(filePath, FileMode.Create);
+            var settingJsonText = ReadFile("data/setting.json");
+            var settingJson     = JsonUtility.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
 
-            return await CopyImageToFile(streamToReadFrom, streamToWriteTo, 5);
+            var httpClientHandler = new HttpClientHandler();
+
+            if (settingJson.UseProxy)
+            {
+                httpClientHandler = new HttpClientHandler()
+                                    {
+                                        Proxy = new WebProxy($"http://{settingJson.ProxyUrl}:{settingJson.ProxyPort}"),
+                                        UseProxy = true
+                                    };
+            }
+
+            if (settingJson.UseUnsaveUrl)
+            {
+                httpClientHandler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            }
+
+            using HttpClient     client   = new(httpClientHandler);
+            HttpResponseMessage? response = null;
+
+            try
+            {
+                response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+
+
+                await using var    streamToReadFrom = await response.Content.ReadAsStreamAsync();
+                await using Stream streamToWriteTo  = File.Open(filePath, FileMode.Create);
+
+                return await CopyImageToFile(streamToReadFrom, streamToWriteTo, 5);
+            }
+            catch (HttpRequestException ex) when (ex.InnerException is AuthenticationException)
+            {
+                MessageBox.Show($"错误：SSL/TLS证书错误，地址：{uri}，此图片将不会下载到epub中");
+            }
+            catch (HttpRequestException ex)
+            {
+                MessageBox.Show($"错误：{ex.Message}，地址：{uri}，此图片将不会下载到epub中");
+            }
+            finally
+            {
+                response?.Dispose();
+            }
+
+            return "fail";
         }
 
         private static async Task<string> CopyImageToFile(Stream streamToReadFrom, Stream streamToWriteTo, int time)
@@ -106,7 +156,7 @@ namespace Masiro.lib
                 return "fail";
             }
 
-            var random     = new System.Random();
+            var random     = new Random();
             var randomTime = random.Next(0, (int)(2000 * (1.0 - time * 0.2)));
             await Task.Delay(randomTime);
             try

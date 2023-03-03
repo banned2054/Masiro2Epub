@@ -11,7 +11,7 @@
         MinWidth="800"
         MinHeight="600"
         ResizeMode="NoResize"
-        Icon="https://raw.banned.top/img/2023/02/19/195839.ico"
+        Icon="https://raw-banned-1301696511.cos.accelerate.myqcloud.com/img/2023/02/19/195839.ico"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
         UseLayoutRounding="False"
         ShowInTaskbar="True">

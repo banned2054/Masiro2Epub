@@ -5,18 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Masiro.views"
              mc:Ignorable="d">
+
     <StackPanel>
-        <CheckBox
-            FontSize="20"
-            x:Name="ProxyCheckBox"
-            Content="使用代理"
-            Margin="0,0,0,10" />
+        <StackPanel
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
+            <Label
+                FontSize="20"
+                Style="{StaticResource NoBorderLabel}">
+                开启代理
+            </Label>
+            <CheckBox
+                VerticalAlignment="Center" Margin="5"
+                x:Name="ProxyCheckBox" />
+        </StackPanel>
         <StackPanel
             Orientation="Horizontal">
             <Label
                 FontSize="20"
                 Style="{StaticResource NoBorderLabel}"
                 VerticalContentAlignment="Center"
+                ToolTip="http代理"
                 Margin="0,0,20,0">
                 代理地址
             </Label>
@@ -38,6 +47,7 @@
                 FontSize="20"
                 TextAlignment="Center"
                 Width="80"
+                TextChanged="ProxyPortEdit_OnTextChanged"
                 IsEnabled="{Binding ElementName=ProxyCheckBox, Path=IsChecked}" />
         </StackPanel>
     </StackPanel>

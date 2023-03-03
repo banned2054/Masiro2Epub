@@ -4,14 +4,32 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Masiro.views"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Canvas>
+             mc:Ignorable="d">
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel
+            Height="400"
+            Canvas.Top="60">
             <local:ProxySettingUserControl
-                x:Name="ProxySettingUc"
-                Canvas.Left="100"
-                Canvas.Top="60" />
-        </Canvas>
-    </Grid>
+                x:Name="ProxySettingUc" />
+            <StackPanel
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Label
+                    FontSize="20"
+                    ToolTip="例如https证书到期"
+                    Style="{StaticResource NoBorderLabel}">
+                    允许访问不安全的链接
+                </Label>
+                <CheckBox
+                    VerticalAlignment="Center" Margin="5"
+                    x:Name="UnsaveUrlCheckBox" />
+            </StackPanel>
+            <Border Height="240"></Border>
+            <Button
+                Click="SaveSettingButton_OnClick"
+                FontSize="20" Padding="0,0,0,0" Width="70" Height="40">
+                保存
+            </Button>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

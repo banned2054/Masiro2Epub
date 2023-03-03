@@ -59,6 +59,7 @@ namespace Masiro.lib
                 }
             }
 
+            int a = 1;
 
             foreach (var lineNode in lineList)
             {
