@@ -9,7 +9,6 @@ namespace Masiro
         public MainWindow()
         {
             InitializeComponent();
-
             HomePageUc.SelectUc.ExportButtonClicked += HandleCustomEvent;
         }
 
