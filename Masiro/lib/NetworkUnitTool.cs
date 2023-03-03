@@ -1,4 +1,6 @@
 ﻿using BrotliSharpLib;
+using HandyControl.Controls;
+using Masiro.reference;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -6,10 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using HandyControl.Controls;
-using Masiro.reference;
 
 namespace Masiro.lib
 {

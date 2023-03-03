@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Masiro.lib;
+using Masiro.reference;
+using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -9,8 +10,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using Masiro.lib;
-using Masiro.reference;
 
 namespace Masiro.views
 {

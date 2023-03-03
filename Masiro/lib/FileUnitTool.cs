@@ -1,12 +1,12 @@
-﻿using Microsoft.Win32;
+﻿using HandyControl.Controls;
+using Masiro.reference;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Security.Authentication;
 using System.Threading.Tasks;
-using HandyControl.Controls;
-using Masiro.reference;
 
 namespace Masiro.lib
 {

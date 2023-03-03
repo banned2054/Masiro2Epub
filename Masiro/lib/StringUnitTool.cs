@@ -59,8 +59,6 @@ namespace Masiro.lib
                 }
             }
 
-            int a = 1;
-
             foreach (var lineNode in lineList)
             {
                 var imageNode = lineNode.SelectSingleNode(".//img");
