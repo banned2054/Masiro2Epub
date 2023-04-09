@@ -33,48 +33,26 @@ namespace Masiro.lib
             htmlDoc.LoadHtml(originText);
             var bodyDivNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'box-body')]");
             if (bodyDivNode == null) return ans;
-            var lineList = bodyDivNode.SelectNodes(".//span[@style]");
-            if (lineList == null)
-            {
-                lineList = bodyDivNode.SelectNodes(".//p");
-                if (lineList == null)
-                {
-                    lineList = bodyDivNode.SelectNodes(".//div");
-                }
-                else if (lineList.Count == 1)
-                {
-                    lineList = bodyDivNode.SelectNodes(".//div");
-                }
-            }
-            else if (lineList.Count == 1)
-            {
-                lineList = bodyDivNode.SelectNodes(".//p");
-                if (lineList == null)
-                {
-                    lineList = bodyDivNode.SelectNodes(".//div");
-                }
-                else if (lineList.Count == 1)
-                {
-                    lineList = bodyDivNode.SelectNodes(".//div");
-                }
-            }
 
-            foreach (var lineNode in lineList)
+            var lineIndex = 0;
+            var nodeLineList = htmlDoc.DocumentNode
+                .SelectSingleNode("//div[contains(@class, 'box-body')]")
+                .SelectNodes(".//text() | .//br | .//img")
+                .Select(node => new { lineNo = node.Name == "br" ? lineIndex++ : lineIndex, node })
+                .ToLookup(line => line.lineNo, line => line.node);
+
+            foreach (var nodeLine in nodeLineList)
             {
-                var imageNode = lineNode.SelectSingleNode(".//img");
-                if (imageNode != null)
-                {
-                    var src = imageNode.GetAttributeValue("src", "");
-                    ans.Add(new MessageItem("Image", src));
-                }
-                else
-                {
-                    var line = lineNode.InnerText.Trim();
-                    if (line        == "") continue;
-                    if (line.Length == 1) continue;
-                    if (line.All(c => c == '?')) line = "";
-                    ans.Add(new MessageItem(line));
-                }
+                nodeLine.Where(node => node.Name == "img")
+                    .Select(imageNode => imageNode.GetAttributeValue("src", ""))
+                    .ToList()
+                    .ForEach(src => ans.Add(new MessageItem("Image", src)));
+                var lineText = string.Join(
+                    "",
+                    nodeLine.Where(node => node.Name != "img")
+                    .Select(node => node.InnerText)
+                    );
+                ans.Add(new MessageItem(lineText));
             }
 
             return ans;
