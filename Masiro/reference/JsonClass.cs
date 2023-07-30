@@ -49,7 +49,7 @@ namespace Masiro.reference
             UseProxy     = false;
             UseUnsaveUrl = false;
 
-            ProxyUrl  = "";
+            ProxyUrl = "";
         }
     }
 }

@@ -58,7 +58,7 @@ namespace Masiro.lib
                     lineList = bodyDivNode.SelectNodes(".//div");
                 }
             }
-
+            
             foreach (var lineNode in lineList)
             {
                 var imageNode = lineNode.SelectSingleNode(".//img");
@@ -70,7 +70,7 @@ namespace Masiro.lib
                 else
                 {
                     var line = lineNode.InnerText.Trim();
-                    if (line        == "") continue;
+                    if (line == "") continue;
                     if (line.Length == 1) continue;
                     if (line.All(c => c == '?')) line = "";
                     ans.Add(new MessageItem(line));
@@ -112,6 +112,7 @@ namespace Masiro.lib
                     var text = liNode.InnerHtml;
 
                     if (!text.Contains("episode-ul")) continue;
+                    if (!text.Contains("</a>")) continue;
                     var nowEpisodeList = GetEpisodeList(text);
                     var chapterLength  = chapterList.Count;
                     if (chapterLength > 0)
@@ -132,13 +133,26 @@ namespace Masiro.lib
             var ulNode = htmlDoc.DocumentNode.SelectSingleNode("//ul[@class='episode-ul']");
 
             if (ulNode == null) return episodeList;
-            episodeList = (from aNode in ulNode.SelectNodes(".//a")
-                           let href = aNode.GetAttributeValue("href", "")
-                           where href != null
-                           let aNodeInnerHtml = aNode.InnerHtml
-                           let title = GetEpisodeTitle(aNodeInnerHtml)
-                           where title != "" && href != ""
-                           select new Episode(title, href)).ToList();
+            foreach (var aNode in ulNode.SelectNodes(".//a"))
+            {
+                var href = aNode.GetAttributeValue("href", "");
+                if (string.IsNullOrEmpty(href))
+                {
+                    continue;
+                }
+
+                var aNodeInnerHtml = aNode.InnerHtml;
+                var title          = GetEpisodeTitle(aNodeInnerHtml);
+
+                if (string.IsNullOrEmpty(title))
+                {
+                    continue;
+                }
+
+                var episode = new Episode(title, href);
+                episodeList.Add(episode);
+            }
+
             return episodeList;
         }
 
