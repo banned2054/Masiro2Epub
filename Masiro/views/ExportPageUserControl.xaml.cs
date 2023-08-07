@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,9 +38,9 @@ namespace Masiro.views
         {
             InitializeComponent();
             var binding = new Binding("NowValue")
-                          {
-                              Source = this
-                          };
+            {
+                Source = this
+            };
             ExportProgressBar.SetBinding(RangeBase.ValueProperty, binding);
         }
 
@@ -79,17 +78,23 @@ namespace Masiro.views
                 return;
             }
 
-            if (SectionGridUc.EpisodeList.Any(episode => episode.Title == "" || episode.SubUrl == "" ||
-                                                         (!episode.SubUrl
-                                                                  .StartsWith("https://masiro.me/admin/novelReading?cid=") &&
-                                                          !episode.SubUrl
-                                                                  .StartsWith("/admin/novelReading?cid="))
-                                             ))
+            var invalidEpisodeFound = false;
 
+            foreach (var episode in SectionGridUc.EpisodeList)
+            {
+                if (episode.Title != "" && episode.SubUrl != "" &&
+                    (episode.SubUrl.StartsWith("https://masiro.me/admin/novelReading?cid=") ||
+                     episode.SubUrl.StartsWith("/admin/novelReading?cid="))) continue;
+                invalidEpisodeFound = true;
+                break;
+            }
+
+            if (invalidEpisodeFound)
             {
                 MessageBox.Show("请检查章节名和链接");
                 return;
             }
+
 
             var jsonText = FileUnitTool.ReadFile("data/user.json");
             var user     = JsonUtility.FromJson<UserInfoJson>(jsonText);
@@ -119,20 +124,20 @@ namespace Masiro.views
         private void UpdateProcessBar()
         {
             var thread = new Thread(new ThreadStart(() =>
-                                                    {
-                                                        //只要在导出，就一直关注更新进度条
-                                                        while (_isExporting)
-                                                        {
-                                                            UpdateValue();
-                                                            if (Math.Abs(NowProgress - 100) > 0.000001) continue;
-                                                            _isExporting = false;
-                                                            System.Diagnostics.Process.Start("Explorer.exe",
-                                                                _finalName);
-                                                        }
-                                                    }))
-                         {
-                             IsBackground = true
-                         };
+            {
+                //只要在导出，就一直关注更新进度条
+                while (_isExporting)
+                {
+                    UpdateValue();
+                    if (Math.Abs(NowProgress - 100) > 0.000001) continue;
+                    _isExporting = false;
+                    System.Diagnostics.Process.Start("Explorer.exe",
+                                                     _finalName);
+                }
+            }))
+            {
+                IsBackground = true
+            };
             thread.Start();
         }
 
@@ -141,11 +146,11 @@ namespace Masiro.views
             while (NowProgress < _maxProgress)
             {
                 ExportProgressBar.Dispatcher.BeginInvoke((ThreadStart)delegate
-                                                                      {
-                                                                          NowProgress =
-                                                                              Math.Min(1, _maxProgress - NowProgress) +
-                                                                              NowProgress;
-                                                                      });
+                {
+                    NowProgress =
+                        Math.Min(1, _maxProgress - NowProgress) +
+                        NowProgress;
+                });
                 //0.1秒刷新一次
                 Thread.Sleep(100);
             }

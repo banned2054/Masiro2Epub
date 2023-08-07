@@ -4,7 +4,6 @@ using OpenCCNET;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text;
 
 namespace Masiro.lib
@@ -28,37 +27,45 @@ namespace Masiro.lib
         public static List<MessageItem> GetBody(string originText)
         {
             List<MessageItem> ans = new();
+            originText = originText.Replace("&nbsp;", "");
 
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(originText);
+
+            // 删除所有<span>标签并保留其中的内容
+            var spanNodes = htmlDoc.DocumentNode.SelectNodes("//span");
+            if (spanNodes != null)
+            {
+                foreach (var spanNode in spanNodes)
+                {
+                    var parent = spanNode.ParentNode;
+
+                    // 创建一个新的HtmlDocument对象并加载<span>标签的内容
+                    var tempDoc = new HtmlDocument();
+                    tempDoc.LoadHtml(spanNode.InnerHtml);
+
+                    // 遍历新文档的所有子节点，并将它们插入到原始文档中的适当位置
+                    foreach (var childNode in tempDoc.DocumentNode.ChildNodes)
+                    {
+                        parent.InsertBefore(childNode.CloneNode(true), spanNode);
+                    }
+
+                    parent.RemoveChild(spanNode);
+                }
+            }
+
             var bodyDivNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'box-body')]");
             if (bodyDivNode == null) return ans;
-            var lineList = bodyDivNode.SelectNodes(".//span[@style]");
+            var lineList = bodyDivNode.SelectNodes(".//p");
             if (lineList == null)
             {
-                lineList = bodyDivNode.SelectNodes(".//p");
-                if (lineList == null)
-                {
-                    lineList = bodyDivNode.SelectNodes(".//div");
-                }
-                else if (lineList.Count == 1)
-                {
-                    lineList = bodyDivNode.SelectNodes(".//div");
-                }
+                lineList = bodyDivNode.SelectNodes(".//div");
             }
             else if (lineList.Count == 1)
             {
-                lineList = bodyDivNode.SelectNodes(".//p");
-                if (lineList == null)
-                {
-                    lineList = bodyDivNode.SelectNodes(".//div");
-                }
-                else if (lineList.Count == 1)
-                {
-                    lineList = bodyDivNode.SelectNodes(".//div");
-                }
+                lineList = bodyDivNode.SelectNodes(".//div") ?? bodyDivNode.SelectNodes(".//p");
             }
-            
+
             foreach (var lineNode in lineList)
             {
                 var imageNode = lineNode.SelectSingleNode(".//img");
@@ -69,11 +76,24 @@ namespace Masiro.lib
                 }
                 else
                 {
-                    var line = lineNode.InnerText.Trim();
+                    var line = lineNode.InnerHtml.Trim();
                     if (line == "") continue;
-                    if (line.Length == 1) continue;
-                    if (line.All(c => c == '?')) line = "";
-                    ans.Add(new MessageItem(line));
+                    var lines = line.Split("<br>");
+                    foreach (var ll in lines)
+                    {
+                        var allQuestionMarks = true;
+                        var li               = ll.Trim();
+                        foreach (var c in li)
+                        {
+                            if (c is '?' or '?')
+                                continue;
+                            allQuestionMarks = false;
+                            break;
+                        }
+
+                        if (allQuestionMarks) li = "";
+                        ans.Add(new MessageItem(li));
+                    }
                 }
             }
 
