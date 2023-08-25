@@ -2,7 +2,7 @@
 
 namespace Masiro.reference
 {
-    class ArgumentConvey
+    internal class ArgumentConvey
     {
         public class ChapterHandleArgs : EventArgs
         {

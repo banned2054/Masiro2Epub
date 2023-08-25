@@ -9,10 +9,12 @@ namespace Masiro.views
     public partial class LoginUserControl : UserControl
     {
         public event EventHandler LoginButtonClicked = null!;
-        bool                      _isLogin           = false;
+
+        private bool _isLogin;
 
         public LoginUserControl()
         {
+            _isLogin = false;
             InitializeComponent();
 
             if (!FileUnitTool.JudgeFileExist("data")) FileUnitTool.MakeDir("data");

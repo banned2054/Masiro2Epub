@@ -17,7 +17,7 @@ namespace Masiro.views
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             var filePath = FileUnitTool.SelectFile();
-            this.BookCoverEdit.Text = filePath;
+            BookCoverEdit.Text = filePath;
         }
     }
 }

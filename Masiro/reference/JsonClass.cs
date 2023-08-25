@@ -25,14 +25,14 @@ namespace Masiro.reference
 
     internal class LoginStatusJson
     {
-        public int     code { get; set; }
-        public string  msg  { get; set; }
-        public string? url  { get; set; }
+        public int     Code { get; set; }
+        public string  Msg  { get; set; }
+        public string? Url  { get; set; }
 
         public LoginStatusJson()
         {
-            msg = "";
-            url = default;
+            Msg = "";
+            Url = default;
         }
     }
 

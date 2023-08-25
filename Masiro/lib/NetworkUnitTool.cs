@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Masiro.lib
 {
-    class NetworkUnitTool
+    internal class NetworkUnitTool
     {
         public static async Task<bool> IsImageUrl(string url)
         {
@@ -147,7 +147,7 @@ namespace Masiro.lib
                 }
             }
 
-            return new Token($"fail:请检查网址和代理是否有问题", new CookieCollection());
+            return new Token("fail:请检查网址和代理是否有问题", new CookieCollection());
         }
 
         public static async Task<Token> LoginMasiro(Token nowToken, string userName, string password)
@@ -234,7 +234,7 @@ namespace Masiro.lib
                 }
             }
 
-            return new Token($"fail:请检查网址和代理是否有问题", new CookieCollection());
+            return new Token("fail:请检查网址和代理是否有问题", new CookieCollection());
         }
 
         public static async Task<Token> MasiroHtml(CookieCollection cookies, string subUrl)

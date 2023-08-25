@@ -14,10 +14,10 @@ namespace Masiro.views
 {
     public partial class ExportPageUserControl : UserControl
     {
-        private bool   _isExporting = false;
-        private double _maxProgress = 0;
-        private int    _i           = 0;
-        private string _finalName   = "";
+        private bool   _isExporting;
+        private double _maxProgress;
+        private int    _i;
+        private string _finalName = "";
 
         public double NowProgress
         {
@@ -107,12 +107,10 @@ namespace Masiro.views
             var epubPath = $"result/{BookTitleUc.BookTitleEdit.Text}.epub";
             if (FileUnitTool.JudgeFileExist(epubPath))
             {
-                if (MessageBox.Show("文件已存在，是否删除覆盖？", "Confirm Message", MessageBoxButton.OKCancel) ==
-                    MessageBoxResult.OK)
-                {
-                    FileUnitTool.DeleteFile(epubPath);
-                    ExportWorks();
-                }
+                if (MessageBox.Show("文件已存在，是否删除覆盖？", "Confirm Message", MessageBoxButton.OKCancel) !=
+                    MessageBoxResult.OK) return;
+                FileUnitTool.DeleteFile(epubPath);
+                ExportWorks();
             }
             else
             {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Masiro.lib
 {
-    enum FileType
+    internal enum FileType
     {
         Image,
         Html
