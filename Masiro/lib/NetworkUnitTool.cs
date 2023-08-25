@@ -24,10 +24,10 @@ namespace Masiro.lib
             if (settingJson.UseProxy)
             {
                 httpClientHandler = new HttpClientHandler()
-                                    {
-                                        Proxy = new WebProxy($"http://{settingJson.ProxyUrl}:{settingJson.ProxyPort}"),
-                                        UseProxy = true
-                                    };
+                {
+                    Proxy    = new WebProxy($"http://{settingJson.ProxyUrl}:{settingJson.ProxyPort}"),
+                    UseProxy = true
+                };
             }
 
             if (settingJson.UseUnsaveUrl)
@@ -105,12 +105,19 @@ namespace Masiro.lib
                     return new Token($"fail:{response.StatusCode}", new CookieCollection());
                 }
 
-                var contentEncoding = response.Headers?.FirstOrDefault(h => h.Name != null &&
-                                                                            h.Name.Equals("Content-Encoding",
-                                                                                StringComparison
-                                                                                   .OrdinalIgnoreCase))
-                                             ?.Value
-                                             ?.ToString();
+                string? contentEncoding = null;
+
+                if (response.Headers != null)
+                {
+                    foreach (var h in response.Headers)
+                    {
+                        if (h.Name == null || !h.Name.Equals("Content-Encoding", StringComparison.OrdinalIgnoreCase))
+                            continue;
+                        contentEncoding = h.Value?.ToString();
+                        break; // Exit the loop once the desired header is found
+                    }
+                }
+
                 if (contentEncoding != null && contentEncoding.Contains("br"))
                 {
                     var compressedBytes = response.RawBytes;
@@ -162,12 +169,12 @@ namespace Masiro.lib
 
             var client = new RestClient(options);
             var loginData = new Dictionary<string, string>()
-                            {
-                                { "username", userName },
-                                { "password", password },
-                                { "remember", "1" },
-                                { "_token", nowToken.MyToken }
-                            };
+            {
+                { "username", userName },
+                { "password", password },
+                { "remember", "1" },
+                { "_token", nowToken.MyToken }
+            };
 
             var request = new RestRequest("/admin/auth/login", Method.Post);
 
@@ -200,18 +207,18 @@ namespace Masiro.lib
 
                 if (loginPostResponse.Content == null)
                     return loginPostResponse.Cookies != null
-                               ? new Token("fail:登陆失败，请尝试重新登录或联系开发者", loginPostResponse.Cookies)
-                               : new Token("fail:登陆失败，请尝试重新登录或联系开发者", new CookieCollection());
+                        ? new Token("fail:登陆失败，请尝试重新登录或联系开发者", loginPostResponse.Cookies)
+                        : new Token("fail:登陆失败，请尝试重新登录或联系开发者", new CookieCollection());
                 var loginStats = JsonUtility.FromJson<LoginStatusJson>(loginPostResponse.Content);
                 if (loginStats == null)
                     return loginPostResponse.Cookies != null
-                               ? new Token("fail:登陆失败，请尝试重新登录或联系开发者", loginPostResponse.Cookies)
-                               : new Token("fail:登陆失败，请尝试重新登录或联系开发者", new CookieCollection());
+                        ? new Token("fail:登陆失败，请尝试重新登录或联系开发者", loginPostResponse.Cookies)
+                        : new Token("fail:登陆失败，请尝试重新登录或联系开发者", new CookieCollection());
                 if (loginStats.code == 1)
                 {
                     return loginPostResponse.Cookies != null
-                               ? new Token("success", loginPostResponse.Cookies)
-                               : new Token("success", new CookieCollection());
+                        ? new Token("success", loginPostResponse.Cookies)
+                        : new Token("success", new CookieCollection());
                 }
 
                 return new Token($"fail:{loginStats.msg}", new CookieCollection());
@@ -269,12 +276,12 @@ namespace Masiro.lib
 
                 if (novelResponse.Content != null)
                     return novelResponse.Cookies != null
-                               ? new Token(novelResponse.Content, novelResponse.Cookies)
-                               : new Token(novelResponse.Content, new CookieCollection());
+                        ? new Token(novelResponse.Content, novelResponse.Cookies)
+                        : new Token(novelResponse.Content, new CookieCollection());
 
                 return novelResponse.Cookies != null
-                           ? new Token("fail:没有文字", novelResponse.Cookies)
-                           : new Token("fail:没有文字", new CookieCollection());
+                    ? new Token("fail:没有文字", novelResponse.Cookies)
+                    : new Token("fail:没有文字", new CookieCollection());
             }
             catch (WebException ex)
             {
