@@ -1,4 +1,4 @@
-﻿namespace Masiro.lib
+﻿namespace Masiro.model
 {
     internal class MessageItem
     {

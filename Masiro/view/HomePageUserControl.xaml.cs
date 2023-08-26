@@ -1,10 +1,11 @@
 ﻿using Masiro.lib;
+using Masiro.model;
 using Masiro.reference;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     public partial class HomePageUserControl : UserControl
     {

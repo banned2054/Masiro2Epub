@@ -1,10 +1,10 @@
-﻿using Masiro.reference;
+﻿using Masiro.model;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     public partial class SectionGridUserControl : UserControl
     {

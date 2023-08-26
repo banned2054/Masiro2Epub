@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Masiro.reference
+namespace Masiro.model
 {
     public class ImagePath
     {

@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Masiro.reference
+namespace Masiro.model
 {
     internal class UserInfoJson
     {

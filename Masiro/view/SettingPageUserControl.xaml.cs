@@ -1,9 +1,9 @@
-﻿using System.Windows;
+﻿using Masiro.lib;
+using Masiro.model;
+using System.Windows;
 using System.Windows.Controls;
-using Masiro.lib;
-using Masiro.reference;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     public partial class SettingPageUserControl : UserControl
     {

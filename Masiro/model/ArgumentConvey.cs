@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Masiro.reference
+namespace Masiro.model
 {
     internal class ArgumentConvey
     {

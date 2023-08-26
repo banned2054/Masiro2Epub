@@ -1,10 +1,10 @@
 ﻿using Masiro.lib;
-using Masiro.reference;
+using Masiro.model;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     public partial class LoginUserControl : UserControl
     {

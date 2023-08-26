@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     /// <summary>
     /// ProxySettingUserControl.xaml 的交互逻辑

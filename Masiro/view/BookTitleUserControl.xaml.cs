@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     /// <summary>
     /// BookTitleUserControl.xaml 的交互逻辑

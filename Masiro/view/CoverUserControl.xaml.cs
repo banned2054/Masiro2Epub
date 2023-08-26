@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     /// <summary>
     /// CoverUserControl.xaml 的交互逻辑

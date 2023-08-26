@@ -1,5 +1,5 @@
 ﻿using Masiro.lib;
-using Masiro.reference;
+using Masiro.model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     public partial class ExportPageUserControl : UserControl
     {

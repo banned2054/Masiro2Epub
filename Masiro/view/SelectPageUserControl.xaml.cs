@@ -1,11 +1,11 @@
 ﻿using Masiro.lib;
-using Masiro.reference;
+using Masiro.model;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     public partial class SelectPageUserControl : UserControl
     {

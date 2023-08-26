@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Masiro.views"
+        xmlns:local="clr-namespace:Masiro.view"
+        xmlns:view="clr-namespace:Masiro.view"
         mc:Ignorable="d"
         Title="真白萌导出工具"
         Width="800"
@@ -30,7 +31,7 @@
                     x:Name="ExportPageUc" />
             </TabItem>
             <TabItem Header="设置">
-                <local:SettingPageUserControl
+                <view:SettingPageUserControl
                     x:Name="SettingPageUc" />
             </TabItem>
         </TabControl>

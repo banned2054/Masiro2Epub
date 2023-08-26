@@ -1,6 +1,6 @@
 ﻿using BrotliSharpLib;
 using HandyControl.Controls;
-using Masiro.reference;
+using Masiro.model;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -214,14 +214,14 @@ namespace Masiro.lib
                     return loginPostResponse.Cookies != null
                         ? new Token("fail:登陆失败，请尝试重新登录或联系开发者", loginPostResponse.Cookies)
                         : new Token("fail:登陆失败，请尝试重新登录或联系开发者", new CookieCollection());
-                if (loginStats.code == 1)
+                if (loginStats.Code == 1)
                 {
                     return loginPostResponse.Cookies != null
                         ? new Token("success", loginPostResponse.Cookies)
                         : new Token("success", new CookieCollection());
                 }
 
-                return new Token($"fail:{loginStats.msg}", new CookieCollection());
+                return new Token($"fail:{loginStats.Msg}", new CookieCollection());
             }
             catch (WebException ex)
             {

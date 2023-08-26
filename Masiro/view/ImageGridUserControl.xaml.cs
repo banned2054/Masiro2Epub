@@ -1,11 +1,11 @@
 ﻿using Masiro.lib;
-using Masiro.reference;
+using Masiro.model;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Masiro.views
+namespace Masiro.view
 {
     /// <summary>
     /// ImageGridUserControl.xaml 的交互逻辑

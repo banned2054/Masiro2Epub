@@ -1,5 +1,5 @@
 ﻿using HtmlAgilityPack;
-using Masiro.reference;
+using Masiro.model;
 using OpenCCNET;
 using System;
 using System.Collections.Generic;
