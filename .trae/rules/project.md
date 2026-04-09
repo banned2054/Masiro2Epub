@@ -1,0 +1,1 @@
+这是个wpf的程序，内部是一个爬虫，从masiro.me上导出小说为epub文件，同时因为masiro添加了反爬虫的Cloudflare，所以改用webview2来过真人验证。
