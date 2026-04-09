@@ -70,7 +70,6 @@ public partial class LoginUserControl : UserControl
             jsonString  = JsonUtils.ToJson(user);
             FileUtils.WriteFile("data/user.json", jsonString);
 
-            MessageBox.Show("登录成功！");
             LoginButtonClicked?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception ex)

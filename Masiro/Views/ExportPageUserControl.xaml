@@ -10,12 +10,48 @@
             <StackPanel
                 Canvas.Left="60"
                 Canvas.Top="60">
-                <local:BookTitleUserControl
-                    Margin="0,0,0,20"
-                    x:Name="BookTitleUc" />
-                <local:CoverUserControl
-                    x:Name="CoverUc"
-                    Margin="0,0,0,10" />
+                <!-- 标题输入 -->
+                <StackPanel
+                    Height="40"
+                    Orientation="Horizontal"
+                    Margin="0,0,0,20">
+                    <Label
+                        Style="{StaticResource NoBorderLabel}"
+                        FontSize="20"
+                        VerticalContentAlignment="Center"
+                        Margin="0,0,20,0">
+                        标题
+                    </Label>
+                    <TextBox
+                        x:Name="BookTitleEdit"
+                        Width="300" />
+                </StackPanel>
+                <!-- 封面输入 -->
+                <StackPanel
+                    Height="40"
+                    Orientation="Horizontal"
+                    Margin="0,0,0,10">
+                    <Label
+                        Style="{StaticResource NoBorderLabel}"
+                        FontSize="20"
+                        VerticalContentAlignment="Center"
+                        Margin="0,0,20,0">
+                        封面
+                    </Label>
+                    <TextBox
+                        x:Name="BookCoverEdit"
+                        Width="300"
+                        Margin="0,0,20,0" />
+                    <Button
+                        Click="SelectCoverButtonClick"
+                        BorderThickness="1,1,1,1"
+                        FontSize="20"
+                        Padding="0,0,0,0"
+                        Height="36"
+                        Width="120">
+                        选择封面
+                    </Button>
+                </StackPanel>
                 <StackPanel
                     Margin="0,0,0,20"
                     Orientation="Horizontal">

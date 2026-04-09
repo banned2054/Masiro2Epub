@@ -6,13 +6,16 @@ using System.Text;
 using System.Text.Json;
 using HtmlAgilityPack;
 using Masiro.Models;
-using OpenCCNET;
+using OpenCC;
 
 namespace Masiro.Utils;
 
 internal class StringUtils
 {
     private const string CharacterList = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // 繁体转简体转换器（延迟初始化）
+    private static readonly Lazy<Func<string, string>> HantToHansConverter = new(() => OpenCC.OpenCC.Converter("tw", "cn"));
 
     public static string GetTitle(string originText)
     {
@@ -127,10 +130,10 @@ internal class StringUtils
 
             if (fatherChapters != null && episodes != null)
             {
-                ZhConverter.Initialize();
+                var converter = HantToHansConverter.Value;
                 foreach (var father in fatherChapters)
                 {
-                    var bookTitle  = father.title.ToHansFromHant();
+                    var bookTitle  = converter(father.title);
                     var newChapter = new Chapter(bookTitle);
 
                     var relatedEpisodes = episodes.Where(e => e.parent_id == father.id).ToList();
@@ -138,7 +141,7 @@ internal class StringUtils
 
                     foreach (var ep in relatedEpisodes)
                     {
-                        var title   = ep.title.ToHansFromHant();
+                        var title   = converter(ep.title);
                         var subUrl  = $"/admin/novelReading?cid={ep.id}";
                         var episode = new Episode(title, subUrl);
                         episodeList.Add(episode);
@@ -240,14 +243,14 @@ internal class StringUtils
 
     private static string GetEpisodeTitle(string originText)
     {
-        ZhConverter.Initialize();
+        var converter = HantToHansConverter.Value;
         var htmlDoc = new HtmlDocument();
         htmlDoc.LoadHtml(originText);
         var liNode    = htmlDoc.DocumentNode.SelectSingleNode("//li");
         var spanNodes = liNode?.SelectNodes(".//span");
         if (spanNodes is not { Count: > 0 }) return "";
         var title = spanNodes[0].InnerText.Trim().Replace("&nbsp;", "");
-        title = title.ToHansFromHant();
+        title = converter(title);
         return title;
     }
 }

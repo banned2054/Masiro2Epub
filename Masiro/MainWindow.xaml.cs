@@ -16,8 +16,8 @@ public partial class MainWindow : Window
     {
         if (e is not ArgumentConvey.ChapterHandleArgs arg) return;
         var chapter = arg.NowChapter;
-        MainWindowTab.SelectedIndex                 = 1; // 切换到第二个选项卡
-        ExportPageUc.BookTitleUc.BookTitleEdit.Text = chapter.BookTitle;
+        MainWindowTab.SelectedIndex     = 1; // 切换到第二个选项卡
+        ExportPageUc.BookTitleEdit.Text = chapter.BookTitle;
         ExportPageUc.SectionGridUc.EpisodeList.Clear();
         foreach (var episode in chapter.EpisodeList)
         {

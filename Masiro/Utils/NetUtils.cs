@@ -1,5 +1,6 @@
 using BrotliSharpLib;
 using Masiro.Models;
+using Masiro.Services;
 using RestSharp;
 using System;
 using System.Collections.Generic;

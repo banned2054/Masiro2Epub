@@ -44,17 +44,23 @@ public partial class ExportPageUserControl : UserControl
         ExportProgressBar.SetBinding(RangeBase.ValueProperty, binding);
     }
 
+    private void SelectCoverButtonClick(object sender, RoutedEventArgs e)
+    {
+        var filePath = FileUtils.SelectFile();
+        BookCoverEdit.Text = filePath;
+    }
+
     private async void ExportButtonClick(object sender, RoutedEventArgs e)
     {
         if (_isExporting) return;
 
-        if (BookTitleUc.BookTitleEdit.Text == "")
+        if (BookTitleEdit.Text == "")
         {
             MessageBox.Show("请输入标题");
             return;
         }
 
-        var coverPath = CoverUc.BookCoverEdit.Text;
+        var coverPath = BookCoverEdit.Text;
         if (coverPath == "")
         {
             MessageBox.Show("请选择封面");
@@ -104,7 +110,7 @@ public partial class ExportPageUserControl : UserControl
             return;
         }
 
-        var epubPath = $"result/{BookTitleUc.BookTitleEdit.Text}.epub";
+        var epubPath = $"result/{BookTitleEdit.Text}.epub";
         if (FileUtils.JudgeFileExist(epubPath))
         {
             if (MessageBox.Show("文件已存在，是否删除覆盖？", "Confirm Message", MessageBoxButton.OKCancel) !=
@@ -181,7 +187,7 @@ public partial class ExportPageUserControl : UserControl
         }
 
         //创建封面
-        ExportUtils.MakeCoverPage(rootPath, CoverUc.BookCoverEdit.Text);
+        ExportUtils.MakeCoverPage(rootPath, BookCoverEdit.Text);
         _maxProgress += 85.0 / totalLength;
 
         //创建章节页面，和文件名+标题的列表
@@ -240,13 +246,13 @@ public partial class ExportPageUserControl : UserControl
         //目录页面
         ExportUtils.MakeContentsXhtml(rootPath, titleList);
         _maxProgress += 85.0 / totalLength;
-        ExportUtils.MakeToc(rootPath, titleList, BookTitleUc.BookTitleEdit.Text);
+        ExportUtils.MakeToc(rootPath, titleList, BookTitleEdit.Text);
         _maxProgress += 85.0 / totalLength;
-        ExportUtils.MakeContentOpf(rootPath, BookTitleUc.BookTitleEdit.Text);
+        ExportUtils.MakeContentOpf(rootPath, BookTitleEdit.Text);
         _maxProgress += 85.0 / totalLength;
 
-        var zipPath  = $"result/{BookTitleUc.BookTitleEdit.Text}.zip";
-        var epubName = $"{BookTitleUc.BookTitleEdit.Text}.epub";
+        var zipPath  = $"result/{BookTitleEdit.Text}.zip";
+        var epubName = $"{BookTitleEdit.Text}.epub";
         var epubPath = $"result/{epubName}";
         await ZipFile.CreateFromDirectoryAsync(rootPath, zipPath);
         _maxProgress += 5;

@@ -40,7 +40,7 @@ var loginResult = await NetUtils.LoginMasiroWithBypass(token, username, password
 
 ### 2. WebView2Service (底层服务)
 
-**文件**: `Masiro/Utils/WebView2Service.cs`
+**文件**: `Masiro/Services/WebView2Service.cs`
 
 **职责**: 封装 WebView2 功能，提供 Cloudflare 绕过能力。
 

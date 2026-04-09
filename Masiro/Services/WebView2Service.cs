@@ -7,7 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Masiro.Utils;
+namespace Masiro.Services;
 
 internal class WebView2Service
 {
