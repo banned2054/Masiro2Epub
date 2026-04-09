@@ -1,4 +1,6 @@
-﻿using Masiro.Models;
+﻿using Masiro.Models.Export;
+using Masiro.Models.User;
+using Masiro.Services;
 using Masiro.Utils;
 using System;
 using System.Collections.Generic;
@@ -69,7 +71,7 @@ public partial class ExportPageUserControl : UserControl
 
         if (coverPath.StartsWith("http"))
         {
-            var flag = await NetUtils.IsImageUrl(coverPath);
+            var flag = await MasiroService.IsImageUrlAsync(coverPath);
 
             if (!flag)
             {
@@ -103,7 +105,7 @@ public partial class ExportPageUserControl : UserControl
 
 
         var jsonText = FileUtils.ReadFile("data/user.json");
-        var user     = JsonUtils.FromJson<UserInfoJson>(jsonText);
+        var user     = JsonUtils.FromJson<UserInfo>(jsonText);
         if (user == null)
         {
             MessageBox.Show("请登录账号");
@@ -195,7 +197,7 @@ public partial class ExportPageUserControl : UserControl
         for (_i = 0; _i < sectionLength; _i++)
         {
             var jsonText = FileUtils.ReadFile("data/user.json");
-            var user     = JsonUtils.FromJson<UserInfoJson>(jsonText);
+            var user     = JsonUtils.FromJson<UserInfo>(jsonText);
             if (user == null)
             {
                 _isExporting = false;
@@ -208,35 +210,24 @@ public partial class ExportPageUserControl : UserControl
                 subUrl = subUrl[17..];
             }
 
-            var originHtml = await NetUtils.MasiroHtmlWithBypass(user.Cookie, subUrl, Window.GetWindow(this));
-            if (originHtml.MyToken.StartsWith("fail"))
+            var service = new MasiroService(user.Cookie);
+            var result = await service.GetNovelHtmlWithAutoLoginAsync(
+                subUrl,
+                user.UserName,
+                user.Password,
+                Window.GetWindow(this));
+
+            if (!result.Success)
             {
-                var token1 = await NetUtils.GetTokenWithBypass(Window.GetWindow(this));
-                var token2 =
-                    await NetUtils.LoginMasiroWithBypass(token1, user.UserName, user.Password, Window.GetWindow(this));
-                if (token2.MyToken != "success")
-                {
-                    var errorMessage = token2.MyToken[5..];
-                    MessageBox.Show($"登录失败:{errorMessage}");
-                    _isExporting = false;
-                    return;
-                }
-
-                user.Cookie = token2.MyCookie;
-                var final = await NetUtils.MasiroHtmlWithBypass(token2.MyCookie, subUrl, Window.GetWindow(this));
-                if (final.MyToken.StartsWith("fail"))
-                {
-                    _isExporting = false;
-                    return;
-                }
-
-                originHtml = final;
+                MessageBox.Show($"获取内容失败:{result.ErrorMessage}");
+                _isExporting = false;
+                return;
             }
 
-            user.Cookie = originHtml.MyCookie;
+            user.Cookie = result.Cookies;
 
             var fileName = await ExportUtils.MakeSection(rootPath,
-                                                         originHtml.MyToken,
+                                                         result.Html,
                                                          _i + 1,
                                                          sectionLength);
             _maxProgress += 85.0 / totalLength;

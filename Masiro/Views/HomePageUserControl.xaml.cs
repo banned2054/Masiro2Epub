@@ -1,4 +1,4 @@
-﻿using Masiro.Models;
+﻿using Masiro.Models.User;
 using Masiro.Utils;
 using System;
 using System.Windows;
@@ -23,7 +23,7 @@ public partial class HomePageUserControl : UserControl
         SelectUc.Visibility = Visibility.Visible;
 
         var jsonString = FileUtils.ReadFile("data/user.json");
-        var user       = JsonUtils.FromJson<UserInfoJson>(jsonString) ?? new UserInfoJson();
+        var user       = JsonUtils.FromJson<UserInfo>(jsonString) ?? new UserInfo();
         SelectUc.UserNameLabel.Content = user.UserName;
     }
 
@@ -33,7 +33,7 @@ public partial class HomePageUserControl : UserControl
         SelectUc.Visibility = Visibility.Collapsed;
 
         var jsonString = FileUtils.ReadFile("data/user.json");
-        var user       = JsonUtils.FromJson<UserInfoJson>(jsonString) ?? new UserInfoJson();
+        var user       = JsonUtils.FromJson<UserInfo>(jsonString) ?? new UserInfo();
         SelectUc.UserNameLabel.Content = user.UserName;
     }
 }

@@ -1,4 +1,7 @@
-﻿using Masiro.Models;
+﻿using Masiro.Models.Chapter;
+using Masiro.Models.Common;
+using Masiro.Models.User;
+using Masiro.Services;
 using Masiro.Utils;
 using System;
 using System.Collections.ObjectModel;
@@ -31,17 +34,19 @@ public partial class SelectPageUserControl : UserControl
         if (url.StartsWith("https://masiro.me/admin/novelView?novel_id="))
         {
             var originText = FileUtils.ReadFile("data/user.json");
-            var user       = JsonUtils.FromJson<UserInfoJson>(originText);
+            var user       = JsonUtils.FromJson<UserInfo>(originText);
             if (user == null) return;
             var subUrl     = url.Split("https://masiro.me")[1];
-            var originHtml = await NetUtils.MasiroHtml(user.Cookie, subUrl);
-            if (originHtml.MyToken.StartsWith("fail"))
+
+            var service = new MasiroService(user.Cookie);
+            var result = await service.GetNovelHtmlWithBypassAsync(subUrl, Window.GetWindow(this));
+            if (!result.Success)
             {
-                MessageBox.Show($"error:{originHtml.MyToken[5..]}");
+                MessageBox.Show($"error:{result.ErrorMessage}");
                 return;
             }
 
-            var chapterList = StringUtils.GetChapterList(originHtml.MyToken);
+            var chapterList = StringUtils.GetChapterList(result.Html);
             ChapterList.Clear();
             foreach (var chapter in chapterList)
             {
@@ -65,7 +70,7 @@ public partial class SelectPageUserControl : UserControl
 
         else
         {
-            ExportButtonClicked?.Invoke(this, new ArgumentConvey.ChapterHandleArgs(selectedChapter));
+            ExportButtonClicked?.Invoke(this, new ChapterHandleArgs(selectedChapter));
         }
     }
 }

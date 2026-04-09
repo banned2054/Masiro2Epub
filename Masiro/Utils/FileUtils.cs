@@ -1,5 +1,5 @@
 ﻿using HandyControl.Controls;
-using Masiro.Models;
+using Masiro.Models.Settings;
 using Microsoft.Win32;
 using System;
 using System.IO;
@@ -101,7 +101,7 @@ internal class FileUtils
     public static async Task<string> DownloadFileAsync(string uri, string filePath)
     {
         var settingJsonText = ReadFile("data/setting.json");
-        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJson     = JsonUtils.FromJson<AppSettings>(settingJsonText) ?? new AppSettings();
 
         var httpClientHandler = new HttpClientHandler();
 

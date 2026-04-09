@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using HtmlAgilityPack;
-using Masiro.Models;
+using Masiro.Models.Chapter;
+using Masiro.Models.Common;
 using OpenCC;
 
 namespace Masiro.Utils;

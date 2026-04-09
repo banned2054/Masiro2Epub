@@ -1,4 +1,4 @@
-﻿using Masiro.Models;
+﻿using Masiro.Models.Settings;
 using Masiro.Utils;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +12,7 @@ public partial class SettingPageUserControl : UserControl
         InitializeComponent();
 
         var jsonText    = FileUtils.ReadFile("data/setting.json");
-        var settingJson = JsonUtils.FromJson<SettingJson>(jsonText) ?? new SettingJson();
+        var settingJson = JsonUtils.FromJson<AppSettings>(jsonText) ?? new AppSettings();
 
         var flag1 = settingJson.UseProxy;
         ProxySettingUc.ProxyCheckBox.IsChecked = flag1;
@@ -26,7 +26,7 @@ public partial class SettingPageUserControl : UserControl
     private void SaveSettingButton_OnClick(object sender, RoutedEventArgs e)
     {
         var jsonText    = FileUtils.ReadFile("data/setting.json");
-        var settingJson = JsonUtils.FromJson<SettingJson>(jsonText) ?? new SettingJson();
+        var settingJson = JsonUtils.FromJson<AppSettings>(jsonText) ?? new AppSettings();
 
         if (ProxySettingUc.ProxyCheckBox.IsChecked == true)
         {

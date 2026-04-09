@@ -1,4 +1,4 @@
-﻿using Masiro.Models;
+﻿using Masiro.Models.Export;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;

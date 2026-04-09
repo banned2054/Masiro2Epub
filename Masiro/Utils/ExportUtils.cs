@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Masiro.Models;
+using Masiro.Models.Export;
 using Masiro.Reference;
 
 namespace Masiro.Utils;

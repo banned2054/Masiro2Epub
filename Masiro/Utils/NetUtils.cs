@@ -1,5 +1,6 @@
 using BrotliSharpLib;
-using Masiro.Models;
+using Masiro.Models.Settings;
+using Masiro.Models.User;
 using Masiro.Services;
 using RestSharp;
 using System;
@@ -20,7 +21,7 @@ internal class NetUtils
     public static async Task<bool> IsImageUrl(string url)
     {
         var settingJsonText = FileUtils.ReadFile("data/setting.json");
-        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJson     = JsonUtils.FromJson<AppSettings>(settingJsonText) ?? new AppSettings();
 
         var httpClientHandler = new HttpClientHandler();
 
@@ -72,7 +73,7 @@ internal class NetUtils
     public static async Task<Token> GetToken()
     {
         var settingJsonText = FileUtils.ReadFile("data/setting.json");
-        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJson     = JsonUtils.FromJson<AppSettings>(settingJsonText) ?? new AppSettings();
 
         var options = new RestClientOptions("https://masiro.me");
 
@@ -154,7 +155,7 @@ internal class NetUtils
     public static async Task<Token> LoginMasiro(Token nowToken, string userName, string password)
     {
         var settingJsonText = FileUtils.ReadFile("data/setting.json");
-        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJson     = JsonUtils.FromJson<AppSettings>(settingJsonText) ?? new AppSettings();
 
         var options = new RestClientOptions("https://masiro.me");
 
@@ -209,7 +210,7 @@ internal class NetUtils
                 return loginPostResponse.Cookies != null
                     ? new Token("fail:登陆失败，请尝试重新登录或联系开发者", loginPostResponse.Cookies)
                     : new Token("fail:登陆失败，请尝试重新登录或联系开发者", new CookieCollection());
-            var loginStats = JsonUtils.FromJson<LoginStatusJson>(loginPostResponse.Content);
+            var loginStats = JsonUtils.FromJson<LoginStatus>(loginPostResponse.Content);
             if (loginStats == null)
                 return loginPostResponse.Cookies != null
                     ? new Token("fail:登陆失败，请尝试重新登录或联系开发者", loginPostResponse.Cookies)
@@ -240,7 +241,7 @@ internal class NetUtils
     public static async Task<Token> MasiroHtml(CookieCollection cookies, string subUrl)
     {
         var settingJsonText = FileUtils.ReadFile("data/setting.json");
-        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJson     = JsonUtils.FromJson<AppSettings>(settingJsonText) ?? new AppSettings();
 
         var options = new RestClientOptions("https://masiro.me");
 

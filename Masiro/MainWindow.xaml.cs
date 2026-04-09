@@ -1,4 +1,5 @@
-﻿using Masiro.Models;
+﻿using Masiro.Models.Chapter;
+using Masiro.Models.Common;
 using System;
 using System.Windows;
 
@@ -14,7 +15,7 @@ public partial class MainWindow : Window
 
     private void HandleCustomEvent(object? sender, EventArgs e)
     {
-        if (e is not ArgumentConvey.ChapterHandleArgs arg) return;
+        if (e is not ChapterHandleArgs arg) return;
         var chapter = arg.NowChapter;
         MainWindowTab.SelectedIndex     = 1; // 切换到第二个选项卡
         ExportPageUc.BookTitleEdit.Text = chapter.BookTitle;

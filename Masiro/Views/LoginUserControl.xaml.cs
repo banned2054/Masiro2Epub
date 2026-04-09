@@ -1,4 +1,4 @@
-﻿using Masiro.Models;
+﻿using Masiro.Models.User;
 using Masiro.Utils;
 using Microsoft.Web.WebView2.Core;
 using System;
@@ -65,7 +65,7 @@ public partial class LoginUserControl : UserControl
             if (!FileUtils.JudgeFileExist("data")) FileUtils.MakeDir("data");
 
             var jsonString = FileUtils.ReadFile("data/user.json");
-            var user       = JsonUtils.FromJson<UserInfoJson>(jsonString) ?? new UserInfoJson();
+            var user       = JsonUtils.FromJson<UserInfo>(jsonString) ?? new UserInfo();
             user.Cookie = cookies;
             jsonString  = JsonUtils.ToJson(user);
             FileUtils.WriteFile("data/user.json", jsonString);
