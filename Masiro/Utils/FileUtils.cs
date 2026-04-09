@@ -16,7 +16,7 @@ internal enum FileType
     Html
 }
 
-internal class FileUnitTool
+internal class FileUtils
 {
     public static void MakeDir(string filePath)
     {
@@ -30,12 +30,12 @@ internal class FileUnitTool
 
     public static string GetRandomFileName(string filePath, string suffix)
     {
-        var newFileName = StringUnitTool.GetRandomString(5) + '.' + suffix;
-        var newFilePath = filePath                          + '/' + newFileName;
+        var newFileName = StringUtils.GetRandomString(5) + '.' + suffix;
+        var newFilePath = filePath                       + '/' + newFileName;
         while (JudgeFileExist(newFilePath))
         {
-            newFileName = StringUnitTool.GetRandomString(5) + '.' + suffix;
-            newFilePath = filePath                          + '/' + newFileName;
+            newFileName = StringUtils.GetRandomString(5) + '.' + suffix;
+            newFilePath = filePath                       + '/' + newFileName;
         }
 
         return newFileName;
@@ -101,7 +101,7 @@ internal class FileUnitTool
     public static async Task<string> DownloadFileAsync(string uri, string filePath)
     {
         var settingJsonText = ReadFile("data/setting.json");
-        var settingJson     = JsonUtility.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
 
         var httpClientHandler = new HttpClientHandler();
 

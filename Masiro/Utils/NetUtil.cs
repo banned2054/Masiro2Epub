@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace Masiro.Utils;
 
-internal class NetworkUnitTool
+internal class NetUtil
 {
     public static async Task<bool> IsImageUrl(string url)
     {
-        var settingJsonText = FileUnitTool.ReadFile("data/setting.json");
-        var settingJson     = JsonUtility.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJsonText = FileUtils.ReadFile("data/setting.json");
+        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
 
         var httpClientHandler = new HttpClientHandler();
 
@@ -68,8 +68,8 @@ internal class NetworkUnitTool
 
     public static async Task<Token> GetToken()
     {
-        var settingJsonText = FileUnitTool.ReadFile("data/setting.json");
-        var settingJson     = JsonUtility.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJsonText = FileUtils.ReadFile("data/setting.json");
+        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
 
         var options = new RestClientOptions("https://masiro.me");
 
@@ -130,7 +130,7 @@ internal class NetworkUnitTool
             }
 
             var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-            htmlDoc.LoadHtml(response.Content);
+            htmlDoc.LoadHtml(response.Content ?? string.Empty);
             var token = htmlDoc.DocumentNode.SelectSingleNode("//input[@class='csrf']/@value")
                               ?.GetAttributeValue("value", string.Empty);
             if (token == null) return new Token();
@@ -152,8 +152,8 @@ internal class NetworkUnitTool
 
     public static async Task<Token> LoginMasiro(Token nowToken, string userName, string password)
     {
-        var settingJsonText = FileUnitTool.ReadFile("data/setting.json");
-        var settingJson     = JsonUtility.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJsonText = FileUtils.ReadFile("data/setting.json");
+        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
 
         var options = new RestClientOptions("https://masiro.me");
 
@@ -209,7 +209,7 @@ internal class NetworkUnitTool
                 return loginPostResponse.Cookies != null
                     ? new Token("fail:登陆失败，请尝试重新登录或联系开发者", loginPostResponse.Cookies)
                     : new Token("fail:登陆失败，请尝试重新登录或联系开发者", new CookieCollection());
-            var loginStats = JsonUtility.FromJson<LoginStatusJson>(loginPostResponse.Content);
+            var loginStats = JsonUtils.FromJson<LoginStatusJson>(loginPostResponse.Content);
             if (loginStats == null)
                 return loginPostResponse.Cookies != null
                     ? new Token("fail:登陆失败，请尝试重新登录或联系开发者", loginPostResponse.Cookies)
@@ -239,8 +239,8 @@ internal class NetworkUnitTool
 
     public static async Task<Token> MasiroHtml(CookieCollection cookies, string subUrl)
     {
-        var settingJsonText = FileUnitTool.ReadFile("data/setting.json");
-        var settingJson     = JsonUtility.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
+        var settingJsonText = FileUtils.ReadFile("data/setting.json");
+        var settingJson     = JsonUtils.FromJson<SettingJson>(settingJsonText) ?? new SettingJson();
 
         var options = new RestClientOptions("https://masiro.me");
 

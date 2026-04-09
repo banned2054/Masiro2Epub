@@ -30,18 +30,18 @@ public partial class SelectPageUserControl : UserControl
         var url = BookUrlEdit.Text;
         if (url.StartsWith("https://masiro.me/admin/novelView?novel_id="))
         {
-            var originText = FileUnitTool.ReadFile("data/user.json");
-            var user       = JsonUtility.FromJson<UserInfoJson>(originText);
+            var originText = FileUtils.ReadFile("data/user.json");
+            var user       = JsonUtils.FromJson<UserInfoJson>(originText);
             if (user == null) return;
             var subUrl     = url.Split("https://masiro.me")[1];
-            var originHtml = await NetworkUnitTool.MasiroHtml(user.Cookie, subUrl);
+            var originHtml = await NetUtil.MasiroHtml(user.Cookie, subUrl);
             if (originHtml.MyToken.StartsWith("fail"))
             {
                 MessageBox.Show($"error:{originHtml.MyToken[5..]}");
                 return;
             }
 
-            var chapterList = StringUnitTool.GetChapterList(originHtml.MyToken);
+            var chapterList = StringUtils.GetChapterList(originHtml.MyToken);
             ChapterList.Clear();
             foreach (var chapter in chapterList)
             {

@@ -63,7 +63,7 @@ public partial class ExportPageUserControl : UserControl
 
         if (coverPath.StartsWith("http"))
         {
-            var flag = await NetworkUnitTool.IsImageUrl(coverPath);
+            var flag = await NetUtil.IsImageUrl(coverPath);
 
             if (!flag)
             {
@@ -72,7 +72,7 @@ public partial class ExportPageUserControl : UserControl
             }
         }
 
-        else if (!FileUnitTool.JudgeFileExist(coverPath))
+        else if (!FileUtils.JudgeFileExist(coverPath))
         {
             MessageBox.Show("封面图片不存在");
             return;
@@ -96,8 +96,8 @@ public partial class ExportPageUserControl : UserControl
         }
 
 
-        var jsonText = FileUnitTool.ReadFile("data/user.json");
-        var user     = JsonUtility.FromJson<UserInfoJson>(jsonText);
+        var jsonText = FileUtils.ReadFile("data/user.json");
+        var user     = JsonUtils.FromJson<UserInfoJson>(jsonText);
         if (user == null)
         {
             MessageBox.Show("请登录账号");
@@ -105,11 +105,11 @@ public partial class ExportPageUserControl : UserControl
         }
 
         var epubPath = $"result/{BookTitleUc.BookTitleEdit.Text}.epub";
-        if (FileUnitTool.JudgeFileExist(epubPath))
+        if (FileUtils.JudgeFileExist(epubPath))
         {
             if (MessageBox.Show("文件已存在，是否删除覆盖？", "Confirm Message", MessageBoxButton.OKCancel) !=
                 MessageBoxResult.OK) return;
-            FileUnitTool.DeleteFile(epubPath);
+            FileUtils.DeleteFile(epubPath);
             ExportWorks();
         }
         else
@@ -167,7 +167,7 @@ public partial class ExportPageUserControl : UserControl
 
         var totalLength = imageLength + sectionLength + 5;
         //创建根目录，和固定的文件
-        var rootPath = EpubExportUnitTool.MakeDir("result");
+        var rootPath = ExportUtils.MakeDir("result");
         _maxProgress += 85.0 / totalLength;
 
         //创建彩页
@@ -175,21 +175,21 @@ public partial class ExportPageUserControl : UserControl
         {
             for (_i = 0; _i < imageLength; _i++)
             {
-                EpubExportUnitTool.MakeImagePage(rootPath, ImageGridUc.ImagePathList[_i].Path, _i + 1, imageLength);
+                ExportUtils.MakeImagePage(rootPath, ImageGridUc.ImagePathList[_i].Path, _i + 1, imageLength);
                 _maxProgress += 85.0 / totalLength;
             }
         }
 
         //创建封面
-        EpubExportUnitTool.MakeCoverPage(rootPath, CoverUc.BookCoverEdit.Text);
+        ExportUtils.MakeCoverPage(rootPath, CoverUc.BookCoverEdit.Text);
         _maxProgress += 85.0 / totalLength;
 
         //创建章节页面，和文件名+标题的列表
         var titleList = new List<FileItem>();
         for (_i = 0; _i < sectionLength; _i++)
         {
-            var jsonText = FileUnitTool.ReadFile("data/user.json");
-            var user     = JsonUtility.FromJson<UserInfoJson>(jsonText);
+            var jsonText = FileUtils.ReadFile("data/user.json");
+            var user     = JsonUtils.FromJson<UserInfoJson>(jsonText);
             if (user == null)
             {
                 _isExporting = false;
@@ -202,11 +202,11 @@ public partial class ExportPageUserControl : UserControl
                 subUrl = subUrl[17..];
             }
 
-            var originHtml = await NetworkUnitTool.MasiroHtml(user.Cookie, subUrl);
+            var originHtml = await NetUtil.MasiroHtml(user.Cookie, subUrl);
             if (originHtml.MyToken.StartsWith("fail"))
             {
-                var token1 = await NetworkUnitTool.GetToken();
-                var token2 = await NetworkUnitTool.LoginMasiro(token1, user.UserName, user.Password);
+                var token1 = await NetUtil.GetToken();
+                var token2 = await NetUtil.LoginMasiro(token1, user.UserName, user.Password);
                 if (token2.MyToken != "success")
                 {
                     var errorMessage = token2.MyToken[5..];
@@ -216,7 +216,7 @@ public partial class ExportPageUserControl : UserControl
                 }
 
                 user.Cookie = token2.MyCookie;
-                var final = await NetworkUnitTool.MasiroHtml(token2.MyCookie, subUrl);
+                var final = await NetUtil.MasiroHtml(token2.MyCookie, subUrl);
                 if (final.MyToken.StartsWith("fail"))
                 {
                     _isExporting = false;
@@ -228,20 +228,20 @@ public partial class ExportPageUserControl : UserControl
 
             user.Cookie = originHtml.MyCookie;
 
-            var fileName = await EpubExportUnitTool.MakeSection(rootPath,
-                                                                originHtml.MyToken,
-                                                                _i + 1,
-                                                                sectionLength);
+            var fileName = await ExportUtils.MakeSection(rootPath,
+                                                         originHtml.MyToken,
+                                                         _i + 1,
+                                                         sectionLength);
             _maxProgress += 85.0 / totalLength;
             titleList.Add(new FileItem(fileName, SectionGridUc.EpisodeList[_i].Title));
         }
 
         //目录页面
-        EpubExportUnitTool.MakeContentsXhtml(rootPath, titleList);
+        ExportUtils.MakeContentsXhtml(rootPath, titleList);
         _maxProgress += 85.0 / totalLength;
-        EpubExportUnitTool.MakeToc(rootPath, titleList, BookTitleUc.BookTitleEdit.Text);
+        ExportUtils.MakeToc(rootPath, titleList, BookTitleUc.BookTitleEdit.Text);
         _maxProgress += 85.0 / totalLength;
-        EpubExportUnitTool.MakeContentOpf(rootPath, BookTitleUc.BookTitleEdit.Text);
+        ExportUtils.MakeContentOpf(rootPath, BookTitleUc.BookTitleEdit.Text);
         _maxProgress += 85.0 / totalLength;
 
         var zipPath  = $"result/{BookTitleUc.BookTitleEdit.Text}.zip";
@@ -249,7 +249,7 @@ public partial class ExportPageUserControl : UserControl
         var epubPath = $"result/{epubName}";
         await ZipFile.CreateFromDirectoryAsync(rootPath, zipPath);
         _maxProgress += 5;
-        FileUnitTool.DeleteDirectory(rootPath);
+        FileUtils.DeleteDirectory(rootPath);
         _maxProgress += 5;
         File.Move(zipPath, epubPath);
         _maxProgress = 100;

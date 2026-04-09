@@ -8,35 +8,35 @@ using Masiro.Reference;
 
 namespace Masiro.Utils;
 
-internal class EpubExportUnitTool
+internal class ExportUtils
 {
     public static string MakeDir(string rootPath)
     {
-        var dirName = StringUnitTool.GetRandomString(5);
+        var dirName = StringUtils.GetRandomString(5);
         var dirPath = $"{rootPath}/{dirName}";
-        while (FileUnitTool.JudgeFileExist(dirPath))
+        while (FileUtils.JudgeFileExist(dirPath))
         {
-            dirName = StringUnitTool.GetRandomString(5);
+            dirName = StringUtils.GetRandomString(5);
             dirPath = $"{rootPath}/{dirName}";
         }
 
-        FileUnitTool.MakeDir(dirPath);
-        FileUnitTool.MakeDir($"{dirPath}/META-INF");
-        FileUnitTool.MakeDir($"{dirPath}/OEBPS");
-        FileUnitTool.MakeDir($"{dirPath}/OEBPS/Images");
-        FileUnitTool.MakeDir($"{dirPath}/OEBPS/Styles");
-        FileUnitTool.MakeDir($"{dirPath}/OEBPS/Text");
+        FileUtils.MakeDir(dirPath);
+        FileUtils.MakeDir($"{dirPath}/META-INF");
+        FileUtils.MakeDir($"{dirPath}/OEBPS");
+        FileUtils.MakeDir($"{dirPath}/OEBPS/Images");
+        FileUtils.MakeDir($"{dirPath}/OEBPS/Styles");
+        FileUtils.MakeDir($"{dirPath}/OEBPS/Text");
 
-        FileUnitTool.MakeFile($"{dirPath}/OEBPS/Styles/style.css");
-        FileUnitTool.WriteFile($"{dirPath}/OEBPS/Styles/style.css", HeadReference.StyleCss);
-
-
-        FileUnitTool.MakeFile($"{dirPath}/META-INF/container.xml");
-        FileUnitTool.WriteFile($"{dirPath}/META-INF/container.xml", HeadReference.ContainerXmlHead);
+        FileUtils.MakeFile($"{dirPath}/OEBPS/Styles/style.css");
+        FileUtils.WriteFile($"{dirPath}/OEBPS/Styles/style.css", HeadReference.StyleCss);
 
 
-        FileUnitTool.MakeFile($"{dirPath}/mimetype");
-        FileUnitTool.WriteFile($"{dirPath}/mimetype", "application/epub+zip");
+        FileUtils.MakeFile($"{dirPath}/META-INF/container.xml");
+        FileUtils.WriteFile($"{dirPath}/META-INF/container.xml", HeadReference.ContainerXmlHead);
+
+
+        FileUtils.MakeFile($"{dirPath}/mimetype");
+        FileUtils.WriteFile($"{dirPath}/mimetype", "application/epub+zip");
         return dirPath;
     }
 
@@ -47,8 +47,8 @@ internal class EpubExportUnitTool
         var imageDirPath   = $"{rootPath}/OEBPS/Images";
         var sectionDirPath = $"{rootPath}/OEBPS/Text";
 
-        var title    = StringUnitTool.GetTitle(originText);
-        var bodyList = StringUnitTool.GetBody(originText);
+        var title    = StringUtils.GetTitle(originText);
+        var bodyList = StringUtils.GetBody(originText);
 
         finalText += $"<title>{title}</title></head><body><div><h2>{title}</h2>";
         //解析body
@@ -60,10 +60,10 @@ internal class EpubExportUnitTool
             }
             else
             {
-                var newImageName = FileUnitTool.GetRandomFileName(imageDirPath, "jpg");
+                var newImageName = FileUtils.GetRandomFileName(imageDirPath, "jpg");
                 var newImagePath = $"{imageDirPath}/{newImageName}";
-                FileUnitTool.MakeFile(newImagePath);
-                var result = await FileUnitTool.DownloadFileAsync(body.ItemValue, newImagePath);
+                FileUtils.MakeFile(newImagePath);
+                var result = await FileUtils.DownloadFileAsync(body.ItemValue, newImagePath);
                 if (result == "fail")
                 {
                     continue;
@@ -90,8 +90,8 @@ internal class EpubExportUnitTool
         newFileName = newFileName + index + ".xhtml";
 
         var newFilePath = $"{sectionDirPath}/{newFileName}";
-        FileUnitTool.MakeFile(newFilePath);
-        FileUnitTool.WriteFile(newFilePath, finalText);
+        FileUtils.MakeFile(newFilePath);
+        FileUtils.WriteFile(newFilePath, finalText);
         return newFileName;
     }
 
@@ -111,16 +111,16 @@ internal class EpubExportUnitTool
         newFileName = newFileName + index + ".xhtml";
 
         var newFilePath = $"{pageDirPath}/{newFileName}";
-        FileUnitTool.MakeFile(newFilePath);
-        FileUnitTool.WriteFile(newFilePath, finalText);
+        FileUtils.MakeFile(newFilePath);
+        FileUtils.WriteFile(newFilePath, finalText);
     }
 
     public static async void MakeCoverPage(string rootPath, string oldImagePath)
     {
         var finalText   = await GetImageText(rootPath, oldImagePath, "封面", "cover.jpg");
         var newFilePath = $"{rootPath}/OEBPS/Text/cover.xhtml";
-        FileUnitTool.MakeFile(newFilePath);
-        FileUnitTool.WriteFile(newFilePath, finalText);
+        FileUtils.MakeFile(newFilePath);
+        FileUtils.WriteFile(newFilePath, finalText);
     }
 
     public static void MakeContentsXhtml(string rootPath, List<FileItem> titleList)
@@ -136,8 +136,8 @@ internal class EpubExportUnitTool
 
         finalText += "</div></body></html>";
         var newFilePath = $"{rootPath}/OEBPS/Text/contents.xhtml";
-        FileUnitTool.MakeFile(newFilePath);
-        FileUnitTool.WriteFile(newFilePath, finalText);
+        FileUtils.MakeFile(newFilePath);
+        FileUtils.WriteFile(newFilePath, finalText);
     }
 
     public static void MakeToc(string rootPath, List<FileItem> titleList, string bookTitle)
@@ -145,7 +145,7 @@ internal class EpubExportUnitTool
         var pageDirPath = $"{rootPath}/OEBPS/Text";
         var finalText   = HeadReference.TocXmlHead;
         finalText += $"<text>{bookTitle}</text></docTitle><navMap>";
-        var fileList = FileUnitTool.GetFileSystemInfos(pageDirPath);
+        var fileList = FileUtils.GetFileSystemInfos(pageDirPath);
         int index    = 1;
         foreach (var fileName in fileList)
         {
@@ -177,8 +177,8 @@ internal class EpubExportUnitTool
 
         finalText += "</navMap></ncx>";
         var newFilePath = $"{rootPath}/OEBPS/toc.ncx";
-        FileUnitTool.MakeFile(newFilePath);
-        FileUnitTool.WriteFile(newFilePath, finalText);
+        FileUtils.MakeFile(newFilePath);
+        FileUtils.WriteFile(newFilePath, finalText);
     }
 
     public static void MakeContentOpf(string rootPath, string bookTitle)
@@ -191,7 +191,7 @@ internal class EpubExportUnitTool
                      "<item id=\"ncx\" href=\"toc.ncx\" media-type=\"application/x-dtbncx+xml\"/>"               +
                      "<item id=\"cover.xhtml\" href=\"Text/cover.xhtml\" media-type=\"application/xhtml+xml\"/>" +
                      "";
-        var fileList = FileUnitTool.GetFileSystemInfos(pageDirPath).ToList();
+        var fileList = FileUtils.GetFileSystemInfos(pageDirPath).ToList();
         int index    = 0;
         while (index < fileList.Count)
         {
@@ -222,7 +222,7 @@ internal class EpubExportUnitTool
         }
 
         finalText += "<item id=\"style.css\" href=\"Styles/style.css\" media-type=\"text/css\"/>";
-        fileList  =  FileUnitTool.GetFileSystemInfos(imageDirPath).ToList();
+        fileList  =  FileUtils.GetFileSystemInfos(imageDirPath).ToList();
         foreach (var imageFile in fileList)
         {
             finalText += $"<item id=\"{imageFile.Name}\" href=\"Images/{imageFile.Name}\"" +
@@ -230,7 +230,7 @@ internal class EpubExportUnitTool
         }
 
         finalText += "</manifest><spine toc=\"ncx\"><itemref idref=\"cover.xhtml\"/>";
-        fileList  =  FileUnitTool.GetFileSystemInfos(pageDirPath).ToList();
+        fileList  =  FileUtils.GetFileSystemInfos(pageDirPath).ToList();
         index     =  0;
         while (index < fileList.Count)
         {
@@ -261,8 +261,8 @@ internal class EpubExportUnitTool
                      "<reference type=\"cover\" title=\"封面\" href=\"Text/cover.xhtml\"/></guide></package>";
 
         var newFilePath = $"{rootPath}/OEBPS/content.opf";
-        FileUnitTool.MakeFile(newFilePath);
-        FileUnitTool.WriteFile(newFilePath, finalText);
+        FileUtils.MakeFile(newFilePath);
+        FileUtils.WriteFile(newFilePath, finalText);
     }
 
     private static async Task<string> GetImageText(string rootPath, string oldImagePath, string title,
@@ -274,13 +274,13 @@ internal class EpubExportUnitTool
         var newImageName = fileName;
         if (newImageName == "")
         {
-            newImageName = FileUnitTool.GetRandomFileName(imageDirPath, "jpg");
+            newImageName = FileUtils.GetRandomFileName(imageDirPath, "jpg");
         }
 
         var newImagePath = $"{imageDirPath}/{newImageName}";
         if (oldImagePath.StartsWith("http"))
         {
-            await FileUnitTool.DownloadFileAsync(oldImagePath, newImagePath);
+            await FileUtils.DownloadFileAsync(oldImagePath, newImagePath);
         }
         else
         {

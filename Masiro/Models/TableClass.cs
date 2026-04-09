@@ -4,7 +4,7 @@ namespace Masiro.Models;
 
 public class ImagePath
 {
-    public string Path { get; set; } = "";
+    public string Path { get; set; } = string.Empty;
 }
 
 public class Episode(string title, string subUrl)

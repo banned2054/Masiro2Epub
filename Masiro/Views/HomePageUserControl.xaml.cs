@@ -22,9 +22,8 @@ public partial class HomePageUserControl : UserControl
         LoginUc.Visibility  = Visibility.Collapsed;
         SelectUc.Visibility = Visibility.Visible;
 
-
-        var jsonString = FileUnitTool.ReadFile("data/user.json");
-        var user       = JsonUtility.FromJson<UserInfoJson>(jsonString) ?? new UserInfoJson();
+        var jsonString = FileUtils.ReadFile("data/user.json");
+        var user       = JsonUtils.FromJson<UserInfoJson>(jsonString) ?? new UserInfoJson();
         SelectUc.UserNameLabel.Content = user.UserName;
     }
 
@@ -33,9 +32,8 @@ public partial class HomePageUserControl : UserControl
         LoginUc.Visibility  = Visibility.Visible;
         SelectUc.Visibility = Visibility.Collapsed;
 
-
-        var jsonString = FileUnitTool.ReadFile("data/user.json");
-        var user       = JsonUtility.FromJson<UserInfoJson>(jsonString) ?? new UserInfoJson();
+        var jsonString = FileUtils.ReadFile("data/user.json");
+        var user       = JsonUtils.FromJson<UserInfoJson>(jsonString) ?? new UserInfoJson();
         SelectUc.UserNameLabel.Content = user.UserName;
     }
 }

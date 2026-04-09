@@ -4,55 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Masiro.Views"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              mc:Ignorable="d">
-    <Grid
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center">
-        <StackPanel
-            HorizontalAlignment="Center">
-            <StackPanel
-                Margin="0,0,0,10"
-                Orientation="Horizontal">
-                <Label
-                    Style="{StaticResource NoBorderLabel}"
-                    VerticalContentAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                    Margin="0,0,20,0"
-                    FontSize="20">
-                    用户名
-                </Label>
-                <TextBox
-                    x:Name="UserNameEdit"
-                    TabIndex="0"
-                    Width="200"
-                    FontSize="20">
-                </TextBox>
-            </StackPanel>
-            <StackPanel
-                Margin="0,0,0,10"
-                Orientation="Horizontal">
-                <Label
-                    Style="{StaticResource NoBorderLabel}"
-                    VerticalContentAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                    Margin="0,0,40,0"
-                    FontSize="20">
-                    密码
-                </Label>
-                <PasswordBox
-                    x:Name="PasswordEdit"
-                    TabIndex="0"
-                    Width="200"
-                    FontSize="20">
-                </PasswordBox>
-            </StackPanel>
-            <Button
-                Width="60"
-                Height="35"
-                Click="LoginButton_OnClick"
-                x:Name="LoginButton">
-                登录
-            </Button>
-        </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#FFF0F0F0" BorderBrush="#FFCCCCCC" BorderThickness="0,0,0,1" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Text="请在浏览器中完成登录，登录成功后点击「完成登录」按钮"
+                           FontSize="14"
+                           Foreground="#FF333333"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Center" />
+                <Button Grid.Column="1"
+                        x:Name="CompleteLoginButton"
+                        Content="完成登录"
+                        Width="100"
+                        Height="30"
+                        FontSize="12"
+                        Click="CompleteLoginButton_OnClick"
+                        Margin="10,0,0,0" />
+            </Grid>
+        </Border>
+
+        <wv2:WebView2 x:Name="WebView"
+                      Grid.Row="1" />
+
+        <Border Grid.Row="2" Background="#FFF0F0F0" BorderBrush="#FFCCCCCC" BorderThickness="0,1,0,0" Padding="10">
+            <TextBlock Text="WebView2 浏览器登录 - 自动处理 Cloudflare 验证"
+                       FontSize="12"
+                       Foreground="#FF666666"
+                       HorizontalAlignment="Center" />
+        </Border>
     </Grid>
 </UserControl>

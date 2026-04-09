@@ -16,7 +16,7 @@ public partial class CoverUserControl : UserControl
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
-        var filePath = FileUnitTool.SelectFile();
+        var filePath = FileUtils.SelectFile();
         BookCoverEdit.Text = filePath;
     }
 }

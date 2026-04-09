@@ -11,8 +11,8 @@ public partial class SettingPageUserControl : UserControl
     {
         InitializeComponent();
 
-        var jsonText    = FileUnitTool.ReadFile("data/setting.json");
-        var settingJson = JsonUtility.FromJson<SettingJson>(jsonText) ?? new SettingJson();
+        var jsonText    = FileUtils.ReadFile("data/setting.json");
+        var settingJson = JsonUtils.FromJson<SettingJson>(jsonText) ?? new SettingJson();
 
         var flag1 = settingJson.UseProxy;
         ProxySettingUc.ProxyCheckBox.IsChecked = flag1;
@@ -25,8 +25,8 @@ public partial class SettingPageUserControl : UserControl
 
     private void SaveSettingButton_OnClick(object sender, RoutedEventArgs e)
     {
-        var jsonText    = FileUnitTool.ReadFile("data/setting.json");
-        var settingJson = JsonUtility.FromJson<SettingJson>(jsonText) ?? new SettingJson();
+        var jsonText    = FileUtils.ReadFile("data/setting.json");
+        var settingJson = JsonUtils.FromJson<SettingJson>(jsonText) ?? new SettingJson();
 
         if (ProxySettingUc.ProxyCheckBox.IsChecked == true)
         {

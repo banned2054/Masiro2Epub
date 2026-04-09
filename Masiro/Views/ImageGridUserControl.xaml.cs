@@ -24,7 +24,7 @@ public partial class ImageGridUserControl : UserControl
 
     private void AddImageButtonClick(object sender, RoutedEventArgs e)
     {
-        var imageList = FileUnitTool.SelectFiles(FileType.Image);
+        var imageList = FileUtils.SelectFiles(FileType.Image);
         foreach (var imagePath in imageList)
         {
             ImagePathList.Add(new ImagePath { Path = imagePath });

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using HtmlAgilityPack;
 using Masiro.Models;
 using OpenCCNET;
 
 namespace Masiro.Utils;
 
-internal class StringUnitTool
+internal class StringUtils
 {
     private const string CharacterList = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -111,9 +112,53 @@ internal class StringUnitTool
         var chapterList = new ObservableCollection<Chapter>();
         var htmlDoc     = new HtmlDocument();
         htmlDoc.LoadHtml(originText);
+
+        // 尝试从 script 标签中获取 JSON 数据（新结构）
+        var fChaptersScriptNode = htmlDoc.DocumentNode.SelectSingleNode("//script[@id='f-chapters-json']");
+        var chaptersScriptNode  = htmlDoc.DocumentNode.SelectSingleNode("//script[@id='chapters-json']");
+
+        if (fChaptersScriptNode != null && chaptersScriptNode != null)
+        {
+            var fChaptersJson = fChaptersScriptNode.InnerText;
+            var chaptersJson  = chaptersScriptNode.InnerText;
+
+            var fatherChapters = JsonSerializer.Deserialize<List<FatherChapterJson>>(fChaptersJson);
+            var episodes       = JsonSerializer.Deserialize<List<EpisodeJson>>(chaptersJson);
+
+            if (fatherChapters != null && episodes != null)
+            {
+                ZhConverter.Initialize();
+                foreach (var father in fatherChapters)
+                {
+                    var bookTitle  = father.title.ToHansFromHant();
+                    var newChapter = new Chapter(bookTitle);
+
+                    var relatedEpisodes = episodes.Where(e => e.parent_id == father.id).ToList();
+                    var episodeList     = new List<Episode>();
+
+                    foreach (var ep in relatedEpisodes)
+                    {
+                        var title   = ep.title.ToHansFromHant();
+                        var subUrl  = $"/admin/novelReading?cid={ep.id}";
+                        var episode = new Episode(title, subUrl);
+                        episodeList.Add(episode);
+                    }
+
+                    newChapter.SetEpisodeList(episodeList);
+                    chapterList.Add(newChapter);
+                }
+            }
+
+            return chapterList;
+        }
+
+        // 回退到旧结构的解析方式
         var ulNode = htmlDoc.DocumentNode.SelectSingleNode("//ul[@class='chapter-ul']");
         if (ulNode == null) return chapterList;
-        foreach (var liNode in ulNode.SelectNodes("li"))
+        var liNodes = ulNode.SelectNodes("li");
+        if (liNodes == null) return chapterList;
+
+        foreach (var liNode in liNodes)
         {
             if (liNode.SelectSingleNode(".//ul[@class='episode-ul']") == null)
             {
@@ -137,6 +182,29 @@ internal class StringUnitTool
         }
 
         return chapterList;
+    }
+
+    // JSON 数据模型
+    private class FatherChapterJson
+    {
+        public int    id       { get; set; }
+        public string title    { get; set; } = "";
+        public string describe { get; set; } = "";
+        public int    limit_lv { get; set; }
+    }
+
+    private class EpisodeJson
+    {
+        public int    id         { get; set; }
+        public int    novel_id   { get; set; }
+        public int    parent_id  { get; set; }
+        public string title      { get; set; } = "";
+        public int    creator    { get; set; }
+        public string describe   { get; set; } = "";
+        public int    limit_lv   { get; set; }
+        public int    cost       { get; set; }
+        public int    translator { get; set; }
+        public int    porter     { get; set; }
     }
 
     private static IEnumerable<Episode> GetEpisodeList(string originText)

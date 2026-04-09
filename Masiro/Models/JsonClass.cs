@@ -6,8 +6,8 @@ internal class UserInfoJson
 {
     public UserInfoJson()
     {
-        UserName = "";
-        Password = "";
+        UserName = string.Empty;
+        Password = string.Empty;
         Cookie   = new CookieCollection();
     }
 
@@ -26,14 +26,14 @@ internal class UserInfoJson
 internal class LoginStatusJson
 {
     public int     Code { get; set; }
-    public string  Msg  { get; set; } = "";
-    public string? Url  { get; set; } = default;
+    public string  Msg  { get; set; } = string.Empty;
+    public string? Url  { get; set; }
 }
 
 internal class SettingJson
 {
     public bool   UseProxy  { get; set; } = false;
-    public string ProxyUrl  { get; set; } = "";
+    public string ProxyUrl  { get; set; } = string.Empty;
     public int    ProxyPort { get; set; }
 
     public bool UseUnsaveUrl { get; set; } = false;

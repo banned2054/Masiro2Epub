@@ -2,7 +2,7 @@
 
 namespace Masiro.Utils;
 
-internal class JsonUtility
+internal class JsonUtils
 {
     // 反序列化 JSON 格式字符串为对象
     public static T? FromJson<T>(string json)

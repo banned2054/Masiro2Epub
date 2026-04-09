@@ -1,0 +1,12 @@
+# 强制所有文件使用 UTF-8 无 BOM
+[*.{cs,cpp,h,js,ts,html,css,xml,json,txt,md,csproj,xaml,axaml}]
+charset = utf-8
+
+# 统一使用 LF 作为行结尾
+end_of_line = lf
+
+# 删除行尾的多余空格
+trim_trailing_whitespace = true
+
+# 强制插入文件末尾的换行符
+insert_final_newline = true

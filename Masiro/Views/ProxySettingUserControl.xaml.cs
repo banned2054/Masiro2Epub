@@ -8,6 +8,8 @@ namespace Masiro.Views;
 /// </summary>
 public partial class ProxySettingUserControl : UserControl
 {
+    private static readonly Regex ProxyPortRegex = new("^[0-9]+$");
+
     public ProxySettingUserControl()
     {
         InitializeComponent();
@@ -16,9 +18,9 @@ public partial class ProxySettingUserControl : UserControl
     private void ProxyPortEdit_OnTextChanged(object sender, TextChangedEventArgs e)
     {
         // 使用正则表达式检查文本是否符合要求
-        var text    = ProxyPortEdit.Text;
-        var pattern = @"^[0-9]+$";
-        if (Regex.IsMatch(text, pattern)) return;
+        var text = ProxyPortEdit.Text;
+
+        if (ProxyPortRegex.IsMatch(text)) return;
         ProxyPortEdit.Text           = Regex.Replace(text, "[^0-9]", "");
         ProxyPortEdit.SelectionStart = ProxyPortEdit.Text.Length;
     }
