@@ -34,7 +34,7 @@ public partial class SelectPageUserControl : UserControl
             var user       = JsonUtils.FromJson<UserInfoJson>(originText);
             if (user == null) return;
             var subUrl     = url.Split("https://masiro.me")[1];
-            var originHtml = await NetUtil.MasiroHtml(user.Cookie, subUrl);
+            var originHtml = await NetUtils.MasiroHtml(user.Cookie, subUrl);
             if (originHtml.MyToken.StartsWith("fail"))
             {
                 MessageBox.Show($"error:{originHtml.MyToken[5..]}");

@@ -63,7 +63,7 @@ public partial class ExportPageUserControl : UserControl
 
         if (coverPath.StartsWith("http"))
         {
-            var flag = await NetUtil.IsImageUrl(coverPath);
+            var flag = await NetUtils.IsImageUrl(coverPath);
 
             if (!flag)
             {
@@ -121,7 +121,7 @@ public partial class ExportPageUserControl : UserControl
     //后台更新进度条的函数，调用一次即可
     private void UpdateProcessBar()
     {
-        var thread = new Thread(new ThreadStart(() =>
+        var thread = new Thread(() =>
         {
             //只要在导出，就一直关注更新进度条
             while (_isExporting)
@@ -132,7 +132,7 @@ public partial class ExportPageUserControl : UserControl
                 System.Diagnostics.Process.Start("Explorer.exe",
                                                  _finalName);
             }
-        }))
+        })
         {
             IsBackground = true
         };
@@ -202,11 +202,12 @@ public partial class ExportPageUserControl : UserControl
                 subUrl = subUrl[17..];
             }
 
-            var originHtml = await NetUtil.MasiroHtml(user.Cookie, subUrl);
+            var originHtml = await NetUtils.MasiroHtmlWithBypass(user.Cookie, subUrl, Window.GetWindow(this));
             if (originHtml.MyToken.StartsWith("fail"))
             {
-                var token1 = await NetUtil.GetToken();
-                var token2 = await NetUtil.LoginMasiro(token1, user.UserName, user.Password);
+                var token1 = await NetUtils.GetTokenWithBypass(Window.GetWindow(this));
+                var token2 =
+                    await NetUtils.LoginMasiroWithBypass(token1, user.UserName, user.Password, Window.GetWindow(this));
                 if (token2.MyToken != "success")
                 {
                     var errorMessage = token2.MyToken[5..];
@@ -216,7 +217,7 @@ public partial class ExportPageUserControl : UserControl
                 }
 
                 user.Cookie = token2.MyCookie;
-                var final = await NetUtil.MasiroHtml(token2.MyCookie, subUrl);
+                var final = await NetUtils.MasiroHtmlWithBypass(token2.MyCookie, subUrl, Window.GetWindow(this));
                 if (final.MyToken.StartsWith("fail"))
                 {
                     _isExporting = false;

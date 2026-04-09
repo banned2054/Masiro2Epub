@@ -1,5 +1,4 @@
-﻿using BrotliSharpLib;
-using HandyControl.Controls;
+using BrotliSharpLib;
 using Masiro.Models;
 using RestSharp;
 using System;
@@ -12,8 +11,11 @@ using System.Threading.Tasks;
 
 namespace Masiro.Utils;
 
-internal class NetUtil
+internal class NetUtils
 {
+    private static readonly WebView2Service WebView2Service = new();
+    private static          bool            _webView2Initialized;
+
     public static async Task<bool> IsImageUrl(string url)
     {
         var settingJsonText = FileUtils.ReadFile("data/setting.json");
@@ -57,12 +59,12 @@ internal class NetUtil
                 await using var stream = ex.Response.GetResponseStream();
                 using var       reader = new StreamReader(stream);
                 var             error  = await reader.ReadToEndAsync();
-                MessageBox.Show(error);
+                HandyControl.Controls.MessageBox.Show(error);
                 return false;
             }
         }
 
-        MessageBox.Show("请检查代理是否有问题");
+        HandyControl.Controls.MessageBox.Show("请检查代理是否有问题");
         return false;
     }
 
@@ -85,7 +87,6 @@ internal class NetUtil
 
         var client = new RestClient(options);
 
-
         var request = new RestRequest("/admin/auth/login");
 
         request.AddHeader("Accept",
@@ -94,7 +95,6 @@ internal class NetUtil
         request.AddHeader("Accept-Language", "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7");
         request.AddHeader("User-Agent",
                           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36");
-
 
         try
         {
@@ -114,7 +114,7 @@ internal class NetUtil
                     if (h.Name == null || !h.Name.Equals("Content-Encoding", StringComparison.OrdinalIgnoreCase))
                         continue;
                     contentEncoding = h.Value?.ToString();
-                    break; // Exit the loop once the desired header is found
+                    break;
                 }
             }
 
@@ -189,7 +189,6 @@ internal class NetUtil
         request.AddHeader("x-csrf-token", nowToken.MyToken);
         request.AddHeader("x-requested-with", "XMLHttpRequest");
         request.AddHeader("Cookie", cookieHeader);
-
 
         foreach (var param in loginData)
         {
@@ -275,9 +274,16 @@ internal class NetUtil
             }
 
             if (novelResponse.Content != null)
+            {
+                if (WebView2Service.IsCloudflareChallengePage(novelResponse.Content))
+                {
+                    return new Token("fail:cloudflare", novelResponse.Cookies ?? new CookieCollection());
+                }
+
                 return novelResponse.Cookies != null
                     ? new Token(novelResponse.Content, novelResponse.Cookies)
                     : new Token(novelResponse.Content, new CookieCollection());
+            }
 
             return novelResponse.Cookies != null
                 ? new Token("fail:没有文字", novelResponse.Cookies)
@@ -295,6 +301,97 @@ internal class NetUtil
         }
 
         return new Token($"fail:请检查网址和代理是否有问题", new CookieCollection());
+    }
+
+    public static async Task<Token> MasiroHtmlWithBypass(CookieCollection       cookies, string subUrl,
+                                                         System.Windows.Window? ownerWindow = null)
+    {
+        var result = await MasiroHtml(cookies, subUrl);
+
+        if (result.MyToken == "fail:cloudflare")
+        {
+            if (!_webView2Initialized)
+            {
+                await WebView2Service.InitializeAsync();
+                _webView2Initialized = true;
+            }
+
+            var url = $"https://masiro.me{subUrl}";
+            WebView2Service.SetCookies(cookies);
+
+            var bypassResult = await WebView2Service.BypassCloudflareAsync(url, ownerWindow);
+
+            if (bypassResult.Success)
+            {
+                return new Token(bypassResult.Html, bypassResult.Cookies);
+            }
+
+            return new Token("fail:Cloudflare 验证失败或用户取消", new CookieCollection());
+        }
+
+        return result;
+    }
+
+    public static async Task<Token> GetTokenWithBypass(System.Windows.Window? ownerWindow = null)
+    {
+        var result = await GetToken();
+
+        if (result.MyToken.StartsWith("fail"))
+        {
+            if (!_webView2Initialized)
+            {
+                await WebView2Service.InitializeAsync();
+                _webView2Initialized = true;
+            }
+
+            var bypassResult =
+                await WebView2Service.BypassCloudflareAsync("https://masiro.me/admin/auth/login", ownerWindow);
+
+            if (bypassResult.Success)
+            {
+                var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+                htmlDoc.LoadHtml(bypassResult.Html);
+                var token = htmlDoc.DocumentNode.SelectSingleNode("//input[@class='csrf']/@value")
+                                  ?.GetAttributeValue("value", string.Empty);
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    return new Token(token, bypassResult.Cookies);
+                }
+            }
+
+            return new Token("fail:Cloudflare 验证失败或用户取消", new CookieCollection());
+        }
+
+        return result;
+    }
+
+    public static async Task<Token> LoginMasiroWithBypass(Token nowToken, string userName, string password,
+                                                          System.Windows.Window? ownerWindow = null)
+    {
+        var result = await LoginMasiro(nowToken, userName, password);
+
+        if (result.MyToken.StartsWith("fail") &&
+            result.MyToken.Contains("cloudflare", StringComparison.OrdinalIgnoreCase))
+        {
+            if (!_webView2Initialized)
+            {
+                await WebView2Service.InitializeAsync();
+                _webView2Initialized = true;
+            }
+
+            var bypassResult =
+                await WebView2Service.BypassCloudflareAsync("https://masiro.me/admin/auth/login", ownerWindow);
+
+            if (bypassResult.Success)
+            {
+                return new Token("success", bypassResult.Cookies);
+            }
+
+            return new Token("fail:Cloudflare 验证失败或用户取消", new CookieCollection());
+        }
+
+        return result;
     }
 
     public class Token(string token, CookieCollection cookie)
